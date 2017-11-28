@@ -3,9 +3,12 @@ using System.Collections.Generic;
 
 namespace PuzzleBlock
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MaxArea
     {
-        static public int MaximalRectangle(bool[][] matrix)
+        public static int MaximalRectangle(bool[][] matrix)
         {
             int m = matrix.Length;
             if (m == 0)
@@ -21,15 +24,14 @@ namespace PuzzleBlock
             {
                 for (int j = 0; j < n; j++)
                 {
-                    //aux[j] = matrix[i][j] - '0' + aux[j];
                     aux[j] = aux[j] + (matrix[i][j] ? 0 : 1);
-                    maxArea = Math.Max(maxArea, maxAreaHist(aux));
+                    maxArea = Math.Max(maxArea, MaxAreaHist(aux));
                 }
             }
             return maxArea;
         }
 
-        static private int maxAreaHist(int[] heights)
+        private static int MaxAreaHist(int[] heights)
         {
             int n = heights.Length;
             Stack<int> stack = new Stack<int>();

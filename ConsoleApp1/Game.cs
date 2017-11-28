@@ -10,16 +10,17 @@ namespace PuzzleBlock
         {
             var game = new Game();
             game.Play();
+            Console.ReadLine();
         }
 
-        Random rnd = new Random(24);
-        Board board = new Board();
-        //IPlayer player = new ManualPlayer();
-        //IPlayer player = new GreedyPlayer();
-        //IPlayer player = new ScoreAutoPlayer();
-        IPlayer player = new SmartPlayer();
-        IGameDrawer renderer = new ConsoleGameDrawer();
-        IDictionary<int, Shape> shapes = new Dictionary<int, Shape>();
+        private Random rnd = new Random(24);
+        private Board board = new Board();
+        //private IPlayer player = new ManualPlayer();
+        //private IPlayer player = new GreedyPlayer();
+        //private IPlayer player = new ScoreAutoPlayer();
+        private IPlayer player = new SmartPlayer();
+        private IGameDrawer renderer = new ConsoleGameDrawer();
+        private IDictionary<int, Shape> shapes = new Dictionary<int, Shape>();
 
         void Play()
         {
@@ -28,36 +29,31 @@ namespace PuzzleBlock
                 renderer.DrawBoard(board);
 
                 if (shapes.Count == 0)
-                {
-                    createShapes();
-                }
+                    CreateShapes();
 
-                drawShapes();
+                DrawShapes();
 
                 while (!board.GameOver(shapes))
                 {
-                    int shapeId = 0;
-                    string placement = "";
-
-                    player.MakeAMove(out shapeId, out placement, board, shapes, renderer);
+                    player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
 
                     if (board.TryPlace(shapes[shapeId], placement))
                     {
                         shapes.Remove(shapeId);
                         break;
                     }
-                    else
-                        renderer.ErrorMessage("<Error>");
+
+                    renderer.ErrorMessage("<Error>");
                 }
             }
+
             renderer.DrawBoard(board);
-            drawShapes();
+            DrawShapes();
             renderer.ErrorMessage("*** Game Over ***");
-            renderer.ShowStats(board);
-            Console.ReadLine();
+            renderer.DrawStats(board);
         }
 
-        private void createShapes()
+        private void CreateShapes()
         {
             var shapeVals = Enum.GetValues(typeof(Shape.Type));
             var shapeOrientations = Enum.GetValues(typeof(Shape.ShapeOrientation));
@@ -70,7 +66,7 @@ namespace PuzzleBlock
             }
         }
 
-        private void drawShapes()
+        private void DrawShapes()
         {
             for (int i = 0; i < 3; i++)
             {

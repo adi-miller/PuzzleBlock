@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuzzleBlock
 {
@@ -13,7 +11,7 @@ namespace PuzzleBlock
         void DrawBoard(Board board);
         void DrawShape(Shape shape, int ordinal, bool canFit);
         void ErrorMessage(string message);
-        void ShowStats(Board board);
+        void DrawStats(Board board);
     }
 
     public class ConsoleGameDrawer : IGameDrawer
@@ -61,22 +59,20 @@ namespace PuzzleBlock
             for (int x = 0; x <= shape.Bits.GetUpperBound(0); x++)
             {
                 for (int y = 0; y <= shape.Bits.GetUpperBound(1); y++)
-                {
-                    if (shape.Bits[x, y]) Console.Write(block); else Console.Write("░");
-                }
+                    Console.Write(shape.Bits[x, y] ? block : "░");
                 Console.WriteLine();
             }
 
-            Console.WriteLine("");
+            Console.WriteLine();
         }
 
         public string ChoosePlacement()
         {
             while (true)
             {
-                Console.Write("Choose placement [A-H, 1-8]: ");
-                var res = Console.ReadLine();
-                if (res[0] >= 'a' && res[0] <= 'h')
+                Console.Write("Choose placement [A-H][1-8]: ");
+                var res = Console.ReadLine()?.ToLower();
+                if (res != null && res[0] >= 'a' && res[0] <= 'h')
                     if ((int)res[1] >= 49 && (int)res[1] <= 57)
                         return res;
             }
@@ -105,7 +101,7 @@ namespace PuzzleBlock
             Console.WriteLine(message);
         }
 
-        public void ShowStats(Board board)
+        public void DrawStats(Board board)
         {
             Console.WriteLine("Stats:");
             Console.WriteLine(" + Score: {0}", board.Score);

@@ -6,12 +6,12 @@ namespace PuzzleBlock
 {
     public class BoardStats
     {
+        private int placements;
+        private int cellCountSum;
+
         public int Placements { get { return placements; } }
         public int AvgCellCount { get { return cellCountSum / placements; } }
         public IList<int> Lines { get; set; }
-
-        private int placements;
-        private int cellCountSum;
 
         public void AddCellCount(int cellCount)
         {
@@ -59,9 +59,11 @@ namespace PuzzleBlock
                 for (int y = 0; y <= 7; y++)
                     Cells[x][y] = source.Cells[x][y];
             }
+
+            // TODO: Copy Stats
         }
 
-        public bool CanFit(Shape shape, int num, int letter)
+        private bool CanFit(Shape shape, int num, int letter)
         {
             // Check if not occupied already and if not out of bound
             try
@@ -85,8 +87,14 @@ namespace PuzzleBlock
 
         public bool TryPlace(Shape shape, string placement)
         {
-            int placeLetter = (int)placement[0] - 97;
-            int placeNumber = (int)placement[1] - 49;
+            if (string.IsNullOrEmpty(placement) || placement.Length != 2)
+                return false;
+
+            int placeLetter = placement[0] - 97;
+            int placeNumber = placement[1] - 49;
+
+            if (placeLetter < 0 || placeLetter > 7 || placeNumber < 0 || placeLetter > 7)
+                return false;
 
             if (!CanFit(shape, placeNumber, placeLetter))
                 return false;
@@ -104,28 +112,41 @@ namespace PuzzleBlock
                     }
                 }
             }
-            if (Score - scorePrior != shape.Score)
-                throw new Exception("Inconsivable");
 
-            // Check lines
+            if (Score - scorePrior != shape.Score)
+                throw new Exception("Inconceivable");
+
+            cleanup();
+
+            Stats.AddCellCount(CellCount());
+            return true;
+        }
+
+        private void cleanup()
+        {
+            // Check cleanup
             var lines = new List<int>();
             var rows = new List<int>();
-            for (int x = 0; x < 8; x++)
+            for (int i = 0; i <= 7; i++)
             {
-                var line = Cells[x][0];
-                var row = Cells[0][x];
-                for (int y = 0; y < 8; y++)
+                var line = Cells[i][0];
+                var row = Cells[0][i];
+                for (int j = 0; j < 8; j++)
                 {
-                    line = line && Cells[x][y];
-                    row = row && Cells[y][x];
+                    line = line && Cells[i][j];
+                    row = row && Cells[j][i];
                 }
                 if (line)
-                    lines.Add(x);
+                    lines.Add(i);
                 if (row)
-                    rows.Add(x);
+                    rows.Add(i);
             }
 
             var total = (lines.Count + rows.Count);
+
+            if (total == 0)
+                return;
+
             if (total == 1)
                 Score += 10;
             else
@@ -139,12 +160,12 @@ namespace PuzzleBlock
                 Score += 100;
             else
             if (total > 4)
-                Score += 100;
+                Score += 100; // TODO: Find out what's the score for this
 
-            Stats.Lines[total]++;
+            Stats.Lines[total-1]++;
 
             // Clear lines
-            for (int x = 0; x < 8; x++)
+            for (int x = 0; x <= 7; x++)
             {
                 foreach (var line in lines)
                 {
@@ -156,15 +177,12 @@ namespace PuzzleBlock
                     Cells[x][row] = false;
                 }
             }
-
-            Stats.AddCellCount(CellCount());
-            return true;
         }
 
         public bool CanFitAnywhere(Shape shape)
         {
-            for (int x = 0; x < 8; x++)
-                for (int y = 0; y < 8; y++)
+            for (int x = 0; x <= 7; x++)
+                for (int y = 0; y <= 7; y++)
                 {
                     if (CanFit(shape, y, x))
                         return true;
@@ -182,6 +200,7 @@ namespace PuzzleBlock
                 if (CanFitAnywhere(shape))
                     return false;
             }
+
             return true;
         }
 
@@ -200,8 +219,8 @@ namespace PuzzleBlock
         {
             int maxLen = 0;
             int curLen = 0;
-            for (int x = 0; x < 8; x++)
-                for (int y = 0; y < 8; y++)
+            for (int x = 0; x <= 7; x++)
+                for (int y = 0; y <= 7; y++)
                 {
                     if (Cells[x][y])
                         curLen++;
@@ -228,9 +247,9 @@ namespace PuzzleBlock
         public int CellCount()
         {
             int cells = 0;
-            for (int x = 0; x < 8; x++)
+            for (int x = 0; x <= 7; x++)
             {
-                for (int y = 0; y < 8; y++)
+                for (int y = 0; y <= 7; y++)
                 {
                     if (Cells[x][y])
                         cells++;

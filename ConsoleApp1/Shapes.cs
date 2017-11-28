@@ -4,17 +4,17 @@
     {
         public bool[,] Bits;
 
-        public enum Type { Singler, SmallL, LargeL, ThreeLiner, FourLiner, FiveLiner, LongTail, SmallSquare, LargeSquare };
+        public enum Type { Singler, SmallL, LargeL, ThreeLiner, FourLiner, FiveLiner, LongTail, SmallSquare, LargeSquare }
         public enum ShapeOrientation { N, W, S, E }
 
-        private Type ShapeType { get; set; }
-        private ShapeOrientation Orientation { get; set; }
+        private Type ShapeType { get; }
+        private ShapeOrientation Orientation { get; }
 
         public Shape(Type type, ShapeOrientation orientation)
         {
             ShapeType = type;
             Orientation = orientation;
-            updateBits();
+            UpdateBits();
 
             for (int x = 0; x <= Bits.GetUpperBound(0); x++)
             {
@@ -26,11 +26,11 @@
             }
         }
 
-        public string Name { get { return string.Format("{0} [{1}]", ShapeType.ToString(), Orientation); } }
+        public string Name => $"{ShapeType.ToString()} [{Orientation}]";
 
         public int Score { get; internal set; }
 
-        private void updateBits()
+        private void UpdateBits()
         {
             switch (ShapeType)
             {
