@@ -56,6 +56,84 @@ namespace PuzzleBlock
         public int MaxArea { get; set; }
     }
 
+    class GamePath
+    {
+        public IList<Candidate> Moves { get; set; }
+
+        public GamePath()
+        {
+            Moves = new List<Candidate>();
+        }
+    }
+
+    class FullEvalPlayer : IPlayer
+    {
+        public void MakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes, IGameDrawer renderer)
+        {
+            shapeId = 0;
+            placement = "";
+
+            var candidates = new List<Candidate>();
+
+            var gamePaths = new List<GamePath>();
+
+            InnerMakeAMove(board, null, shapes, gamePaths, null);
+        }
+
+        private void InnerMakeAMove(Board board, Board newBoard, IDictionary<int, Shape> shapes, IList<GamePath> gamePaths, GamePath startGamePath)
+        {
+            if (shapes.Count == 0)
+                return;
+
+            foreach (var shape in shapes)
+            {
+                if (newBoard == null)
+                    newBoard = new Board(board);
+
+                GamePath gamePath;
+                if (startGamePath == null)
+                {
+                    gamePath = new GamePath();
+                    gamePaths.Add(gamePath);
+                }
+                else
+                {
+                    gamePath = startGamePath;
+                }
+
+                gamePath.Moves.Add(new Candidate() { ShapeId = shape.Key });
+                var newShapes = new Dictionary<int, Shape>();
+                foreach (var sh in shapes)
+                    if (sh.Key != shape.Key)
+                        newShapes.Add(sh.Key, sh.Value);
+                InnerMakeAMove(board, newBoard, newShapes, gamePaths, gamePath);
+            }
+        }
+
+        private void xInnerMakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes, IGameDrawer renderer)
+        {
+
+            placement = "";
+            shapeId = 0;
+
+            foreach (var shape in shapes)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    for (int y = 0; y < 8; y++)
+                    {
+                        var newBoard = new Board(board);
+                        var curPlacement = "" + (char)(97 + x) + (char)(49 + y);
+                        if (newBoard.TryPlace(shape.Value, curPlacement))
+                        {
+//                            var newShapes = 
+                        }
+                    }
+                    }
+                }
+            }
+        }
+
     class SmartPlayer : IPlayer
     {
         public void MakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes, IGameDrawer renderer)
@@ -83,7 +161,7 @@ namespace PuzzleBlock
                             };
                             candidates.Add(candidate);
                             if (candidate.ScoreGain < 0)
-                                throw new Exception("Inconsivable");
+                                throw new Exception("Inconceivable");
                         }
                     }
             }
