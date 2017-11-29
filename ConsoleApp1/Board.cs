@@ -48,8 +48,11 @@ namespace PuzzleBlock
             }
         }
 
-        public Board(Board source)
+        public Board(Board source) 
         {
+            if (source == null)
+                return;
+
             Score = source.Score;
 
             Cells = new bool[8][];
@@ -68,6 +71,9 @@ namespace PuzzleBlock
             // Check if not occupied already and if not out of bound
             try
             {
+                if (((shape.Bits.GetUpperBound(0) + num) >= 8) || (((shape.Bits.GetUpperBound(1) + letter) >= 8)))
+                    return false;
+
                 for (int x = 0; x <= shape.Bits.GetUpperBound(0); x++)
                 {
                     for (int y = 0; y <= shape.Bits.GetUpperBound(1); y++)
@@ -77,7 +83,7 @@ namespace PuzzleBlock
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }
@@ -169,7 +175,7 @@ namespace PuzzleBlock
             {
                 foreach (var line in lines)
                 {
-                    Cells[x][line] = false;
+                    Cells[line][x] = false;
                 }
 
                 foreach (var row in rows)
@@ -181,6 +187,9 @@ namespace PuzzleBlock
 
         public bool CanFitAnywhere(Shape shape)
         {
+            if (shape == null)
+                return false;
+
             for (int x = 0; x <= 7; x++)
                 for (int y = 0; y <= 7; y++)
                 {

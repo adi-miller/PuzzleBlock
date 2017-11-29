@@ -37,7 +37,7 @@ namespace PuzzleBlock
             }
         }
 
-        private Random rnd = new Random(24);
+        private Random rnd = new Random();
         private Board board = new Board();
         //private IPlayer player = new ManualPlayer();
         //private IPlayer player = new GreedyPlayer();

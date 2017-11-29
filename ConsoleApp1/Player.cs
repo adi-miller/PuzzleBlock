@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace PuzzleBlock
 {
@@ -58,63 +59,57 @@ namespace PuzzleBlock
 
     class GamePath
     {
+        public int CellsGain { get; set; }
+        public int ScoreGain { get; set; }
+
         public IList<Candidate> Moves { get; set; }
 
         public GamePath()
         {
             Moves = new List<Candidate>();
         }
+
+        public GamePath(GamePath source)
+        {
+            Moves = new List<Candidate>();
+
+            if (source != null)
+            {
+                foreach (var candidate in source.Moves)
+                    Moves.Add(candidate);
+
+                CellsGain = source.CellsGain;
+                ScoreGain = source.ScoreGain;
+            }
+        }
     }
 
     class FullEvalPlayer : IPlayer
     {
-        public void MakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes, IGameDrawer renderer)
+        public void MakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes,
+            IGameDrawer renderer)
         {
             shapeId = 0;
             placement = "";
-
-            var candidates = new List<Candidate>();
 
             var gamePaths = new List<GamePath>();
 
-            InnerMakeAMove(board, null, shapes, gamePaths, null);
+            InnerMakeAMove(board, shapes, gamePaths, null);
+
+            var best = (from x in gamePaths orderby x.ScoreGain descending, x.CellsGain select x).First();
+
+            shapeId = best.Moves[0].ShapeId;
+            placement = best.Moves[0].Placement;
+
         }
 
-        private void InnerMakeAMove(Board board, Board newBoard, IDictionary<int, Shape> shapes, IList<GamePath> gamePaths, GamePath startGamePath)
+        private void InnerMakeAMove(Board board, IDictionary<int, Shape> shapes,
+            IList<GamePath> gamePaths, GamePath startGamePath)
         {
             if (shapes.Count == 0)
-                return;
-
-            foreach (var shape in shapes)
             {
-                if (newBoard == null)
-                    newBoard = new Board(board);
-
-                GamePath gamePath;
-                if (startGamePath == null)
-                {
-                    gamePath = new GamePath();
-                    gamePaths.Add(gamePath);
-                }
-                else
-                {
-                    gamePath = startGamePath;
-                }
-
-                gamePath.Moves.Add(new Candidate() { ShapeId = shape.Key });
-                var newShapes = new Dictionary<int, Shape>();
-                foreach (var sh in shapes)
-                    if (sh.Key != shape.Key)
-                        newShapes.Add(sh.Key, sh.Value);
-                InnerMakeAMove(board, newBoard, newShapes, gamePaths, gamePath);
+                gamePaths.Add(startGamePath);
             }
-        }
-
-        private void xInnerMakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes, IGameDrawer renderer)
-        {
-
-            placement = "";
-            shapeId = 0;
 
             foreach (var shape in shapes)
             {
@@ -122,17 +117,37 @@ namespace PuzzleBlock
                 {
                     for (int y = 0; y < 8; y++)
                     {
+                        var curPlacement = "" + (char) (97 + x) + (char) (49 + y);
                         var newBoard = new Board(board);
-                        var curPlacement = "" + (char)(97 + x) + (char)(49 + y);
                         if (newBoard.TryPlace(shape.Value, curPlacement))
                         {
-//                            var newShapes = 
+                            GamePath gamePath;
+                            gamePath = new GamePath(startGamePath);
+
+                            var cellsGain = newBoard.CellCount() - board.CellCount();
+                            var scoreGain = newBoard.Score - board.Score;
+                            gamePath.Moves.Add(new Candidate()
+                            {
+                                ShapeId = shape.Key,
+                                Placement = curPlacement,
+                                CellsGain = cellsGain,
+                                ScoreGain = scoreGain
+                            });
+
+                            gamePath.CellsGain += cellsGain;
+                            gamePath.ScoreGain += scoreGain;
+
+                            var newShapes = new Dictionary<int, Shape>();
+                            foreach (var sh in shapes)
+                                if (sh.Key != shape.Key)
+                                    newShapes.Add(sh.Key, sh.Value);
+                            InnerMakeAMove(newBoard, newShapes, gamePaths, gamePath);
                         }
-                    }
                     }
                 }
             }
         }
+    }
 
     class SmartPlayer : IPlayer
     {
