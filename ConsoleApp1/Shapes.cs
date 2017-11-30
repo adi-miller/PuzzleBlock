@@ -14,7 +14,7 @@ namespace PuzzleBlock
 
         public ConsoleColor Color { get; }
 
-        public Shape(Type type, ShapeOrientation orientation, ConsoleColor color)
+        public Shape(Type type, ShapeOrientation orientation, ConsoleColor color = ConsoleColor.DarkGray)
         {
             ShapeType = type;
             Orientation = orientation;
