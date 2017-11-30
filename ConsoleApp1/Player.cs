@@ -61,6 +61,7 @@ namespace PuzzleBlock
     {
         public int CellsGain { get; set; }
         public int ScoreGain { get; set; }
+        public int PlacementScore { get; set; }
 
         public IList<Candidate> Moves { get; set; }
 
@@ -80,6 +81,7 @@ namespace PuzzleBlock
 
                 CellsGain = source.CellsGain;
                 ScoreGain = source.ScoreGain;
+                PlacementScore = source.PlacementScore;
             }
         }
     }
@@ -96,7 +98,7 @@ namespace PuzzleBlock
 
             InnerMakeAMove(board, shapes, gamePaths, null);
 
-            var best = (from x in gamePaths orderby x.ScoreGain descending, x.CellsGain select x).First();
+            var best = (from x in gamePaths orderby x.CellsGain, x.PlacementScore select x).First();
 
             shapeId = best.Moves[0].ShapeId;
             placement = best.Moves[0].Placement;
@@ -126,16 +128,18 @@ namespace PuzzleBlock
 
                             var cellsGain = newBoard.CellCount() - board.CellCount();
                             var scoreGain = newBoard.Score - board.Score;
-                            gamePath.Moves.Add(new Candidate()
+                            var candidate = new Candidate()
                             {
                                 ShapeId = shape.Key,
                                 Placement = curPlacement,
                                 CellsGain = cellsGain,
                                 ScoreGain = scoreGain
-                            });
+                            };
+                            gamePath.Moves.Add(candidate);
 
                             gamePath.CellsGain += cellsGain;
                             gamePath.ScoreGain += scoreGain;
+                            gamePath.PlacementScore += candidate.PlacementScore;
 
                             var newShapes = new Dictionary<int, Shape>();
                             foreach (var sh in shapes)

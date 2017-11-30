@@ -69,23 +69,16 @@ namespace PuzzleBlock
         private bool CanFit(Shape shape, int num, int letter)
         {
             // Check if not occupied already and if not out of bound
-            try
-            {
-                if (((shape.Bits.GetUpperBound(0) + num) >= 8) || (((shape.Bits.GetUpperBound(1) + letter) >= 8)))
-                    return false;
-
-                for (int x = 0; x <= shape.Bits.GetUpperBound(0); x++)
-                {
-                    for (int y = 0; y <= shape.Bits.GetUpperBound(1); y++)
-                    {
-                        if (shape.Bits[x, y] && Cells[num + x][letter + y])
-                            return false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+            if (((shape.Bits.GetUpperBound(0) + num) >= 8) || (((shape.Bits.GetUpperBound(1) + letter) >= 8)))
                 return false;
+
+            for (int x = 0; x <= shape.Bits.GetUpperBound(0); x++)
+            {
+                for (int y = 0; y <= shape.Bits.GetUpperBound(1); y++)
+                {
+                    if (shape.Bits[x, y] && Cells[num + x][letter + y])
+                        return false;
+                }
             }
 
             return true;
