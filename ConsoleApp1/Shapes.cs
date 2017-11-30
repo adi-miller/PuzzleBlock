@@ -1,4 +1,6 @@
-﻿namespace PuzzleBlock
+﻿using System;
+
+namespace PuzzleBlock
 {
     public class Shape
     {
@@ -10,10 +12,13 @@
         private Type ShapeType { get; }
         private ShapeOrientation Orientation { get; }
 
-        public Shape(Type type, ShapeOrientation orientation)
+        public ConsoleColor Color { get; }
+
+        public Shape(Type type, ShapeOrientation orientation, ConsoleColor color)
         {
             ShapeType = type;
             Orientation = orientation;
+            Color = color;
             UpdateBits();
 
             for (int x = 0; x <= Bits.GetUpperBound(0); x++)

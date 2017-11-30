@@ -58,12 +58,22 @@ namespace PuzzleBlock
         {
             var shapeVals = Enum.GetValues(typeof(Shape.Type));
             var shapeOrientations = Enum.GetValues(typeof(Shape.ShapeOrientation));
+            var colors = new ConsoleColor[]
+            {
+                ConsoleColor.DarkGreen,
+                ConsoleColor.DarkCyan,
+                ConsoleColor.DarkRed,
+                ConsoleColor.DarkMagenta,
+                ConsoleColor.DarkYellow,
+                ConsoleColor.Blue
+            };
 
             for (int i = 0; i < 3; i++)
             {
                 shapes.Add(i, new Shape(
                     (Shape.Type)shapeVals.GetValue(rnd.Next(shapeVals.Length)),
-                    (Shape.ShapeOrientation)shapeOrientations.GetValue(rnd.Next(shapeOrientations.Length))));
+                    (Shape.ShapeOrientation)shapeOrientations.GetValue(rnd.Next(shapeOrientations.Length)),
+                    (ConsoleColor)colors.GetValue(rnd.Next(colors.Length))));
             }
         }
 

@@ -31,7 +31,9 @@ namespace PuzzleBlock
                 {
                     if (board.Cells[x][y])
                     {
+                        Console.ForegroundColor = board.Colors[x][y];
                         Console.Write(" █ ");
+                        Console.ResetColor();
                     }
                     else
                     {
@@ -55,13 +57,19 @@ namespace PuzzleBlock
             if (shape == null)
                 return;
 
-            var block = canFit ? "█" : "▒";
+
             for (int x = 0; x <= shape.Bits.GetUpperBound(0); x++)
             {
                 for (int y = 0; y <= shape.Bits.GetUpperBound(1); y++)
+                {
+                    var block = canFit ? "█" : "▒";
+                    Console.ForegroundColor = shape.Bits[x, y] ? shape.Color : ConsoleColor.Gray;
                     Console.Write(shape.Bits[x, y] ? block : "░");
+                    Console.ResetColor();
+                }
                 Console.WriteLine();
             }
+
 
             Console.WriteLine();
         }

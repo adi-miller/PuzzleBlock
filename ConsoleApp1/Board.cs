@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,6 +33,7 @@ namespace PuzzleBlock
     public class Board
     {
         public bool[][] Cells { get; }
+        public ConsoleColor[][] Colors { get; }
         public int Score { get; set; }
         public BoardStats Stats = new BoardStats();
 
@@ -40,28 +42,31 @@ namespace PuzzleBlock
             Score = 0;
 
             Cells = new bool[8][];
+            Colors = new ConsoleColor[8][];
             for (int x = 0; x <= 7; x++)
             {
                 Cells[x] = new bool[8];
+                Colors[x] = new ConsoleColor[8];
                 for (int y = 0; y <= 7; y++)
+                {
                     Cells[x][y] = false;
+                }
             }
         }
 
-        public Board(Board source) 
+        public Board(Board source) : this()
         {
             if (source == null)
                 return;
 
             Score = source.Score;
 
-            Cells = new bool[8][];
             for (int x = 0; x <= 7; x++)
-            {
-                Cells[x] = new bool[8];
                 for (int y = 0; y <= 7; y++)
+                {
                     Cells[x][y] = source.Cells[x][y];
-            }
+                    Colors[x][y] = source.Colors[x][y];
+                }
 
             // TODO: Copy Stats
         }
@@ -108,6 +113,7 @@ namespace PuzzleBlock
                     if (shape.Bits[x, y])
                     {
                         Score++;
+                        Colors[placeNumber + x][placeLetter + y] = shape.Color;
                     }
                 }
             }
@@ -115,13 +121,13 @@ namespace PuzzleBlock
             if (Score - scorePrior != shape.Score)
                 throw new Exception("Inconceivable");
 
-            cleanup();
+            Cleanup();
 
             Stats.AddCellCount(CellCount());
             return true;
         }
 
-        private void cleanup()
+        private void Cleanup()
         {
             // Check cleanup
             var lines = new List<int>();
