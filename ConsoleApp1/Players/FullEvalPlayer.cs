@@ -6,6 +6,8 @@ namespace PuzzleBlock.Players
     interface IFullEvalPlayer
     {
         GamePath SelectBestPath(List<GamePath> paths);
+        void GatherStepStats(Candidate candidate, GamePath gamePath, Board board, Board newBoard);
+        void GatherPathStats(GamePath gamePath, Board board);
     }
 
     abstract class FullEvalPlayerBase : IPlayer, IFullEvalPlayer
@@ -41,7 +43,6 @@ namespace PuzzleBlock.Players
             if (shapes.Count == 0)
             {
                 gamePaths.Add(startGamePath);
-                startGamePath.MaxArea = MaxArea.MaximalRectangle(board.Cells);
             }
 
             var placed = false;
@@ -65,7 +66,7 @@ namespace PuzzleBlock.Players
                             };
                             gamePath.Moves.Add(candidate);
 
-                            GatherStats(candidate, gamePath, board, newBoard);
+                            GatherStepStats(candidate, gamePath, board, newBoard);
 
                             var newShapes = new Dictionary<int, Shape>();
                             foreach (var sh in shapes)
@@ -80,14 +81,21 @@ namespace PuzzleBlock.Players
                 gamePaths.Add(startGamePath);
         }
 
-        protected abstract void GatherStats(Candidate candidate, GamePath gamePath, Board board, Board newBoard);
-
         public abstract GamePath SelectBestPath(List<GamePath> paths);
+        public abstract void GatherStepStats(Candidate candidate, GamePath gamePath, Board board, Board newBoard);
+        public abstract void GatherPathStats(GamePath gamePath, Board board);
     }
 
     class FullEvalPlayer : FullEvalPlayerBase
     {
-        protected override void GatherStats(Candidate candidate, GamePath gamePath, Board board, Board newBoard)
+        public override GamePath SelectBestPath(List<GamePath> paths)
+        {
+            var bestList = (from x in paths orderby x.MaxArea descending select x);
+
+            return bestList.First();
+        }
+
+        public override void GatherStepStats(Candidate candidate, GamePath gamePath, Board board, Board newBoard)
         {
             var cellsGain = newBoard.CellCount() - board.CellCount();
             var scoreGain = newBoard.Score - board.Score;
@@ -100,11 +108,10 @@ namespace PuzzleBlock.Players
             gamePath.PlacementScore *= candidate.PlacementScore;
         }
 
-        public override GamePath SelectBestPath(List<GamePath> paths)
+        public override void GatherPathStats(GamePath gamePath, Board board)
         {
-            var bestList = (from x in paths orderby x.MaxArea descending select x);
-
-            return bestList.First();
+            gamePath.MaxArea = MaxArea.MaximalRectangle(board.Cells);
         }
+
     }
 }
