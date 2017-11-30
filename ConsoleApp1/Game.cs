@@ -8,33 +8,9 @@ namespace PuzzleBlock
     {
         static void Main(string[] args)
         {
-//            var shapes = new List<int>();
-//            shapes.Add(1);
-//            shapes.Add(2);
-//            shapes.Add(3);
-//            MakeAMove(shapes, "");
-//            Console.ReadLine();
-//
             var game = new Game();
             game.Play();
             Console.ReadLine();
-        }
-
-        private static void MakeAMove(IList<int> shapes, string path)
-        {
-            if (shapes.Count == 0)
-            {
-                Console.WriteLine(path);
-                return;
-            }
-
-            foreach (var shape in shapes)
-            {
-                var newShapes = new List<int>();
-                newShapes.AddRange(shapes);
-                newShapes.Remove(shape);
-                MakeAMove(newShapes, path+shape);
-            }
         }
 
         private Random rnd = new Random(24);
