@@ -12,6 +12,7 @@ namespace PuzzleBlock
         void DrawShape(Shape shape, int ordinal, bool canFit);
         void ErrorMessage(string message);
         void DrawStats(Board board);
+        void ShowMessage(string s);
     }
 
     public class ConsoleGameDrawer : IGameDrawer
@@ -106,7 +107,9 @@ namespace PuzzleBlock
 
         public void ErrorMessage(string message)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
+            Console.ResetColor();
         }
 
         public void DrawStats(Board board)
@@ -117,6 +120,11 @@ namespace PuzzleBlock
             Console.WriteLine(" + CellCount Average: {0}", board.Stats.AvgCellCount);
             for (int i = 0; i < 8; i++)
                 Console.WriteLine(" + {0} Lines Cleared {1,3} per Placement: {2}", i+1, board.Stats.Lines[i], (float)(board.Stats.Lines[i])/board.Stats.Placements);
+        }
+
+        public void ShowMessage(string msg)
+        {
+            Console.WriteLine(msg);
         }
     }
 }

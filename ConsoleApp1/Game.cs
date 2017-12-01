@@ -10,11 +10,16 @@ namespace PuzzleBlock
         static void Main(string[] args)
         {
             var game = new Game();
+            var seed = DateTime.Now.Millisecond;
+            game.rnd = new Random(seed);
+            var start = DateTime.Now;
             game.Play();
+            Console.WriteLine("Game seed: " + seed);
+            Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
             Console.ReadLine();
         }
 
-        private Random rnd = new Random(24);
+        private Random rnd;
         private Board board = new Board();
         //private IPlayer player = new ManualPlayer();
         private IPlayer player = new FullEvalPlayer();
@@ -36,7 +41,7 @@ namespace PuzzleBlock
                 {
                     player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
 
-                    if (board.TryPlace(shapes[shapeId], placement))
+                    if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
                     {
                         shapes.Remove(shapeId);
                         break;
