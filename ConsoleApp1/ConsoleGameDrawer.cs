@@ -12,14 +12,16 @@ namespace PuzzleBlock
         void DrawShape(Shape shape, int ordinal, bool canFit);
         void ErrorMessage(string message);
         void DrawStats(Board board);
-        void ShowMessage(string s);
+        void ShowMessage(string message);
+        void ShowUpdateMessageStart(string s);
+        void ShowUpdateMessage(string s);
     }
 
     public class ConsoleGameDrawer : IGameDrawer
     {
         public void DrawBoard(Board board)
         {
-            Console.WriteLine(" --- Board - Score: {0} ---", board.Score);
+            Console.WriteLine("   --- Turn: {0,3} - Score: {1,4} ---", board.Stats.Placements, board.Score);
             Console.WriteLine("");
             Console.WriteLine("    A   B   C   D   E   F   G   H");
             Console.WriteLine("  ┌───┬───┬───┬───┬───┬───┬───┬───┐");
@@ -119,12 +121,32 @@ namespace PuzzleBlock
             Console.WriteLine(" + Placements: {0}", board.Stats.Placements);
             Console.WriteLine(" + CellCount Average: {0}", board.Stats.AvgCellCount);
             for (int i = 0; i < 8; i++)
-                Console.WriteLine(" + {0} Lines Cleared {1,3} per Placement: {2}", i+1, board.Stats.Lines[i], (float)(board.Stats.Lines[i])/board.Stats.Placements);
+                Console.WriteLine(" + {0} Lines Cleared {1,3}. Per placement: {2}", i+1, board.Stats.Lines[i], (float)(board.Stats.Lines[i])/board.Stats.Placements);
         }
 
         public void ShowMessage(string msg)
         {
             Console.WriteLine(msg);
+        }
+
+        private DateTime lastPrint;
+        private int cursorPos;
+        private TimeSpan second = new TimeSpan(0, 0, 0, 0, 100);
+
+        public void ShowUpdateMessageStart(string s)
+        {
+            Console.Write(s);
+            cursorPos = Console.CursorLeft;
+        }
+
+        public void ShowUpdateMessage(string s)
+        {
+            if (DateTime.Now - lastPrint > second)
+            {
+                Console.SetCursorPosition(cursorPos, Console.CursorTop);
+                Console.Write(s);
+                lastPrint = DateTime.Now;
+            }
         }
     }
 }
