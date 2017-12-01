@@ -40,3 +40,24 @@ The method receives the following parameters:
 * `Board board`: The `board` object includes all the information about the current state of the `board`, as well as different methods to test and manipulate the board. 
 * `IDictionary<int, Shape> shapes`: A dictionary of the currently available shapes, that needs to be placed in this turn. The dictionary maps between the `int shapeId` and the actual `shape` object.
 * `IGameDrawer renderer`: Can be used to render output to the Console using the `ConsoleGameDrawer` implementation
+
+## Testing
+
+To test your implementation, edit the `Main()` method in `Game`, and instantiate your implementation of IPlayer in the `Game` constructor. 
+
+```csharp
+  static void Main()
+  {
+      var seed = DateTime.Now.Millisecond;
+
+      var game = new Game(new FullEvalPlayer());    // Put here you IPlayer implementation
+      game.rnd = new Random(seed);                  // Consider using a constant seed for debugging
+
+      var start = DateTime.Now;
+      game.Play();
+
+      Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
+      Console.WriteLine("Game seed: " + seed);
+      Console.ReadLine();
+  }
+```
