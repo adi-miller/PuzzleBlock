@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PuzzleBlock;
+using PuzzleBlock.Utils;
 
 namespace Tests
 {

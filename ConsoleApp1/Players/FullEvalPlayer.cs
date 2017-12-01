@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ConsoleApp1.Utils;
+using PuzzleBlock.Utils;
 
 namespace PuzzleBlock.Players
 {
@@ -43,6 +45,7 @@ namespace PuzzleBlock.Players
             if (shapes.Count == 0)
             {
                 gamePaths.Add(startGamePath);
+                GatherPathStats(startGamePath, board);
             }
 
             var placed = false;
@@ -90,7 +93,10 @@ namespace PuzzleBlock.Players
     {
         public override GamePath SelectBestPath(List<GamePath> paths)
         {
-            var bestList = (from x in paths orderby x.MaxArea descending select x);
+            var bestList = (from x in paths orderby x.FragScore descending, x.MaxArea descending select x); // 2474, 235, 17 76|16|4
+            //var bestList = (from x in paths orderby x.FragScore descending, x.MaxArea descending, x.CellCount select x); // 1981, 188, 16 56 |14|2|1
+            //var bestList = (from x in paths orderby x.FragScore descending, x.MaxArea descending, x.CellCount, x.ScoreGain descending select x); //2011, 188, 15 47|18|2|1 
+            //var bestList = (from x in paths orderby x.Rank descending select x); 
 
             return bestList.First();
         }
@@ -110,7 +116,8 @@ namespace PuzzleBlock.Players
 
         public override void GatherPathStats(GamePath gamePath, Board board)
         {
-            gamePath.MaxArea = MaxArea.MaximalRectangle(board.Cells);
+            gamePath.MaxArea = (float)MaxArea.MaximalRectangle(board.Cells)/64;
+            gamePath.FragScore = Fragmentation.GetFragmentationScore(board.Cells);
         }
 
     }

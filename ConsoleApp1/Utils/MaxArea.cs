@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PuzzleBlock
+namespace PuzzleBlock.Utils
 {
     /// <summary>
     /// 
