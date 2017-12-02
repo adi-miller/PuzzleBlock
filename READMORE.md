@@ -36,7 +36,8 @@ The implementation receives a `board` object, as well as an `IDictionary<int, Sh
 
 > For example, returning `2` in `shapeId` and `b5` in placement, will result in attempting to place the second shape in the `shapes` dictionary starting from the upper left corner of the shape in cell `b5`. 
 
-<img align="right" src="./Placement.jpg">
+<img src="./Placement" align="right">
+
 ```csharp
 public void MakeAMove(out int shapeId, out string placement, 
     Board board, IDictionary<int, Shape> shapes,
@@ -45,7 +46,7 @@ public void MakeAMove(out int shapeId, out string placement,
     ...
     if (!shapes.TryGetValue(2, out var shape))
         return;
-         
+        
     var newBoard = new Board(board);
     if (newBoard.TryPlace(shape.Value, curPlacement))
     {
