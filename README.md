@@ -14,8 +14,8 @@ __The purpose of this challenge is to code a _new implementation_ of the `IPlaye
 * You may alter the implementation of the game only for the purpose of supporting your `IPlayer` implementation
     * Do NOT, for example, alter the definition of `Shape` or the way the score is calculated
 * Fork the main branch and push your implementation there. The implementation will be compared to master to make sure no cheats were introduced
-* You may use one of the built-in implementation of `IPlayer`, including `SingleStepGreedyPlayer`, `MultiFactorSingleStepPlayer` or `FullEvalPlayerBase`. 
-* You may alter one of these implementations completely. 
+* You can start from one of the built-in implementation of `IPlayer`, including `SingleStepGreedyPlayer`, `MultiFactorSingleStepPlayer` or `FullEvalPlayerBase` and modify it, or
+* You can start from your own clean implementation of `IPlayer` directly. For more information, see [How to implement the Player](https://github.com/adi-miller/PuzzleBlock/blob/Deep/README.md#how-to-implement-the-player).  
 
 ## The Challenge
 
