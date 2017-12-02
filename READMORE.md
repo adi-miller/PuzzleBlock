@@ -161,8 +161,10 @@ static void Main()
 {
     var seed = DateTime.Now.Millisecond;
 
-    var game = new Game(new FullEvalPlayer());    // Put here you IPlayer implementation
-    game.rnd = new Random(seed);                  // Consider using a constant seed for debugging
+    var game = new Game(
+        new FullEvalPlayer()                    // <-- Put your IPlayer implementation here
+    );    
+    game.rnd = new Random(seed);                // <-- Consider using a constant seed for debugging
 
     var start = DateTime.Now;
     game.Play();
