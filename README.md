@@ -11,6 +11,7 @@ implementations by gaining the highest score in this Console-based implementatio
 ## The Rules
 
 * You may alter the implementation of the game only for the purpose of supporting your `IPlayer` implementation
+    * Do NOT, for example, alter the definition of `Shape` or the way the score is calculated
 * Fork the main branch and push your implementation there. The implementation will be compared to master to make sure no cheats were introduced
 * You may use one of the built-in implementation of `IPlayer`, including `SingleStepGreedyPlayer`, `MultiFactorSingleStepPlayer` or `FullEvalPlayerBase`. 
 * You may alter one of these implementations completely. 
@@ -20,6 +21,23 @@ implementations by gaining the highest score in this Console-based implementatio
 In the challenge, the main measure is the final score. Each implementation will be executed 3 times. Only the highest score will be considered. 
 The winner is the implementation that reaches the highest score. If two competing implementations get to the same final score, the one that ran for the shortest time wins. 
 Each run will be executed using a predetermined seed, so that all implementation will be executed 3 times with 3 different seeds. 
+
+## The Solution Structure
+
+The solution consists of the following projects:
+
+| Project | Description
+| --- | --- |
+|`PuzzleBlockConsole`|A single project that holds the core implementation of the game, as well as the various `IPlayer` implementations. 
+|`Tests`|A Tests project which includes tests for various components in the game|
+
+`PuzzleBlockConsole` consists of the following elements:
+
+|Element | Description
+| --- | --- |
+|asd|asd|
+|asd|asd|
+|asd|asd|
 
 ## The Interface
 
