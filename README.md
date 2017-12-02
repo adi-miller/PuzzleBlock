@@ -1,12 +1,11 @@
 # The Puzzle Block <i>*Coding*</i> Challenge
 <img align="right" width="337" height="330" alt="Block Puzzle Console" src="./BlockPuzzleConsole.jpg">
 
-Welcome to the Puzzle Block Challenge. This challenge is based on the [Block Puzzle](https://play.google.com/store/apps/details?id=com.differencetenderwhite.skirt) game. 
+Welcome to the Puzzle Block Challenge. This challenge is based on the [Block Puzzle Jewel](https://play.google.com/store/apps/details?id=com.differencetenderwhite.skirt) game from [hua weiwei](https://www.google.co.il/search?q=hua+weiwei&stick=H4sIAAAAAAAAAOPgE-LVT9c3NEw2My9PyzXNUIJxc5KqsswKtVSyk630k8vS9ZPzcwtKS1KL4ssyU1Lz0xNzU60KSpNyMoszUosAP-KR8UYAAAA&sa=X&ved=0ahUKEwjlnJqlxOvXAhWSZlAKHVSUCkoQmxMIoAEoATAU) available on Android. From the author:
 
 > The goal is to drop blocks in order to create and destroy full lines on the screen both vertically and horizontally. Don't forget to keep the blocks from filling the screen in this addictive puzzle game.
 
-The purpose of this challenge is to code a new implementation of the `IPlayer` interface, which will beat all other 
-implementations by gaining the highest score in this Console-based implementation of the game. 
+_This_ challenge provides a working implementation of the game, build in C# running on Windows. The implementation comes with a few different implementations of the player, each performing differently. The player implementation is modeled in classes that derive from the `IPlayer` interface. The purpose of this challenge is to code a _new implementation_ of the `IPlayer` interface, which will beat all other  implementations by gaining the highest score. 
 
 ## The Rules
 
@@ -55,13 +54,13 @@ interface IPlayer
 }
 ```
 
-The only method that needs to be implemented is `MakeAMove()`. This method is called by the game contiounsly, as long as it is still possible to place a `Shape` on the game board. 
+The only method that needs to be implemented is `MakeAMove()`. This method is called by the game continuously, as long as it is still possible to place a `Shape` on the game board. 
 The implementation receives a `board` object, as well as an `IDictionary<int, Shape> shapes`, and needs to output the chosen `shapeId` to place and a `placement` string descriptor that specifies where to place the `shape` on the board. 
 
 The method receives the following parameters:
 
 * `out int shapeId`: The implementation must output a value between 1 and 3 to the caller, which will indicate which shape needs to be placed in this turn. Use the `key` from the `shapes` dictionary to determine the `shapeId`
-* `out string placement`: The implementaiton must output a 2 char string indicating the location to place the shape. The first char should be alphanumeric 'a'-'h' and the second char should be numberic '1'-'8'. For example, return `b4` to place the shape starting from the upper-left corner in b4.
+* `out string placement`: The implementation must output a 2 char string indicating the location to place the shape. The first char should be alphanumeric 'a'-'h' and the second char should be numeric '1'-'8'. For example, return `b4` to place the shape starting from the upper-left corner in b4.
 * `Board board`: The `board` object includes all the information about the current state of the `board`, as well as different methods to test and manipulate the board. 
 * `IDictionary<int, Shape> shapes`: A dictionary of the currently available shapes, that needs to be placed in this turn. The dictionary maps between the `int shapeId` and the actual `shape` object.
 * `IGameDrawer renderer`: Can be used to render output to the Console using the `ConsoleGameDrawer` implementation
@@ -70,7 +69,7 @@ The method receives the following parameters:
 
 ### From Scratch
 
-You can start from scratch and simply create a new `class` that implements `IPlayer`. As described above, you will simply need to implement the `MakeAMove()` method, which will be called by the game continously until it is no longer possible to place any of the remaining shapes on the board. 
+You can start from scratch and simply create a new `class` that implements `IPlayer`. As described above, you will simply need to implement the `MakeAMove()` method, which will be called by the game continuously until it is no longer possible to place any of the remaining shapes on the board. 
 
 It is recommended that you place your implementation in the Players folder.
 
