@@ -35,26 +35,26 @@ The only method that needs to be implemented is `MakeAMove()`. This method is ca
 The implementation receives a `board` object, as well as an `IDictionary<int, Shape> shapes`, and needs to output the chosen `shapeId` to place and a `placement` string descriptor that specifies where to place the `shape` on the board. 
 
 > For example, returning `2` in `shapeId` and `b5` in placement, will result in attempting to place the second shape in the `shapes` dictionary starting from the upper left corner of the shape in cell `b5`. 
->
->```csharp
+
 <img align="right" src="./Placement.jpg">
->public void MakeAMove(out int shapeId, out string placement, 
->    Board board, IDictionary<int, Shape> shapes,
->    IGameDrawer renderer)
->{
->    ...
->    if (!shapes.TryGetValue(2, out var shape))
->        return;
->         
->    var newBoard = new Board(board);
->    if (newBoard.TryPlace(shape.Value, curPlacement))
->    {
->        shapeId = 2;
->        placement = "b5";
->    }
->    ...
->}
->```
+```csharp
+public void MakeAMove(out int shapeId, out string placement, 
+    Board board, IDictionary<int, Shape> shapes,
+    IGameDrawer renderer)
+{
+    ...
+    if (!shapes.TryGetValue(2, out var shape))
+        return;
+         
+    var newBoard = new Board(board);
+    if (newBoard.TryPlace(shape.Value, curPlacement))
+    {
+        shapeId = 2;
+        placement = "b5";
+    }
+    ...
+}
+```
 
 The method receives the following parameters:
 
