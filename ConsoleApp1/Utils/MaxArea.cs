@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PuzzleBlock
+namespace PuzzleBlock.Utils
 {
     /// <summary>
     /// 
@@ -24,17 +24,17 @@ namespace PuzzleBlock
             {
                 for (int j = 0; j < n; j++)
                 {
-                    aux[j] = aux[j] + (matrix[i][j] ? 0 : 1);
-                    maxArea = Math.Max(maxArea, MaxAreaHist(aux));
+                    aux[j] = matrix[i][j] ? aux[j] = 0 : aux[j] + (matrix[i][j] ? 0 : 1);
                 }
+                maxArea = Math.Max(maxArea, MaxAreaHist(aux));
             }
             return maxArea;
         }
 
-        private static int MaxAreaHist(int[] heights)
+        public static int MaxAreaHist(int[] heights)
         {
             int n = heights.Length;
-            Stack<int> stack = new Stack<int>();
+            Stack<int> stack = new Stack<int>(64);
             stack.Push(0);
             int maxRect = heights[0];
             int top = 0;
@@ -83,5 +83,6 @@ namespace PuzzleBlock
             }
             return maxRect;
         }
+
     }
 }

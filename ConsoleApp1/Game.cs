@@ -1,25 +1,35 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using PuzzleBlock.Players;
 
 namespace PuzzleBlock
 {
     class Game
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            var game = new Game();
+            var seed = DateTime.Now.Millisecond;
+            var start = DateTime.Now;
+
+            var game = new Game(new FullEvalPlayer());
+
+            game.rnd = new Random(seed);
             game.Play();
+
+            Console.WriteLine("Game seed: " + seed);
+            Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
             Console.ReadLine();
         }
 
-        private Random rnd = new Random(24);
+        public Game(IPlayer player)
+        {
+            this.player = player;
+        }
+
+        private Random rnd;
         private Board board = new Board();
-        //private IPlayer player = new ManualPlayer();
-        //private IPlayer player = new GreedyPlayer();
-        //private IPlayer player = new ScoreAutoPlayer();
-        //private IPlayer player = new SmartPlayer();
-        private IPlayer player = new FullEvalPlayer();
+        private IPlayer player;
         private IGameDrawer renderer = new ConsoleGameDrawer();
         private IDictionary<int, Shape> shapes = new Dictionary<int, Shape>();
 
@@ -38,7 +48,7 @@ namespace PuzzleBlock
                 {
                     player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
 
-                    if (board.TryPlace(shapes[shapeId], placement))
+                    if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
                     {
                         shapes.Remove(shapeId);
                         break;
@@ -58,12 +68,22 @@ namespace PuzzleBlock
         {
             var shapeVals = Enum.GetValues(typeof(Shape.Type));
             var shapeOrientations = Enum.GetValues(typeof(Shape.ShapeOrientation));
+            var colors = new ConsoleColor[]
+            {
+                ConsoleColor.DarkGreen,
+                ConsoleColor.DarkCyan,
+                ConsoleColor.DarkRed,
+                ConsoleColor.DarkMagenta,
+                ConsoleColor.DarkYellow,
+                ConsoleColor.Blue
+            };
 
             for (int i = 0; i < 3; i++)
             {
                 shapes.Add(i, new Shape(
                     (Shape.Type)shapeVals.GetValue(rnd.Next(shapeVals.Length)),
-                    (Shape.ShapeOrientation)shapeOrientations.GetValue(rnd.Next(shapeOrientations.Length))));
+                    (Shape.ShapeOrientation)shapeOrientations.GetValue(rnd.Next(shapeOrientations.Length)),
+                    (ConsoleColor)colors.GetValue(rnd.Next(colors.Length))));
             }
         }
 

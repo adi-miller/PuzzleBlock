@@ -57,6 +57,7 @@
     <Compile Include="TransposeTests.cs" />
     <Compile Include="MaximalRectangle.cs" />
     <Compile Include="UnitTest1.cs" />
+    <Compile Include="FragmentationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
