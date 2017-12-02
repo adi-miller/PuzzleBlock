@@ -39,8 +39,17 @@ The implementation receives a `board` object, as well as an `IDictionary<int, Sh
 >public void MakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes,
 >    IGameDrawer renderer)
 >{
->    shapeId = 2;
->    placement = "b5";
+     ...
+     if (!shapes.TryGetValue(2, out var shape))
+         return;
+         
+>    var newBoard = new Board(board);
+>    if (newBoard.TryPlace(shape.Value, curPlacement))
+>    {
+>        shapeId = 2;
+>        placement = "b5";
+>    }
+     ...
 >}
 >```
 
