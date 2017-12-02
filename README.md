@@ -41,7 +41,7 @@ This challenge is similar to the Score Challenge, but will require the implement
 
 To get started, clone PuzzleBlock and start coding. For further reading:
 
-* [The Solution Structure]
-* [The IPlayer Interface]
-* [How to implement the Player]
-* [Testing]
+* [The Solution Structure](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#the-solution-structure)
+* [The IPlayer Interface](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#the-iplayer-interface)
+* [How to implement the Player](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#how-to-implement-the-player)
+* [Testing](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#testing)
