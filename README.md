@@ -1,4 +1,4 @@
-# The Puzzle Block Coding Challenge
+# The Puzzle Block <i>*Coding*</i> Challenge
 <img align="right" width="337" height="330" alt="Block Puzzle Console" src="./BlockPuzzleConsole.jpg">
 
 Welcome to the Puzzle Block Challenge. This challenge is based on the [Block Puzzle](https://play.google.com/store/apps/details?id=com.differencetenderwhite.skirt) game. 
