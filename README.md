@@ -5,7 +5,7 @@ Welcome to the Puzzle Block Challenge. This challenge is based on the [Block Puz
 
 > The goal is to drop blocks in order to create and destroy full lines on the screen both vertically and horizontally. Don't forget to keep the blocks from filling the screen in this addictive puzzle game.
 
-_This_ challenge provides a working implementation of the game, built in C# running on Windows. The implementation comes with a few different implementations of the player, each performing differently. The player implementation is modeled in classes that derive from the `IPlayer` interface. 
+_This_ challenge provides a working implementation of the game, built in C# running on Windows. The implementation comes with a few different versions of the player, each performing differently. The player implementation is modeled in classes that derive from the `IPlayer` interface, which are instntiated and passed to the `Game` object. 
 
 __The purpose of this challenge is to code a _new implementation_ of the `IPlayer` interface, which will beat all other  implementations by gaining the highest score__. 
 
