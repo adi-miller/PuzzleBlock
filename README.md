@@ -125,6 +125,35 @@ interface IFullEvalPlayer
 }
 ```
 
+#### SelectBestPath
+
+This method is called after all possible paths have been calculated, to let you select the best path. For example, this implementation uses Linq to sort all paths according to the top score, and returns the first path on the list. 
+
+```csharp
+public override GamePath SelectBestPath(List<GamePath> paths)
+{
+    var scores = from x in paths orderby x.Score descending select x;
+    return scores.First();
+}
+```
+
+#### GatherStepStats
+
+This method is called for each placement that was found (part of the path), and gives you a chance to calculate scores for the step and for the path.
+
+For example, this implementation compares the `newBoard` (the one with the new placement) with the previous `board` to calculate the gain in score made with this placement. It then adds this `ScoreGain` to the overall `ScoreGain` of the `GamePath`. 
+```csharp
+public override void GatherStepStats(Candidate candidate, GamePath gamePath, Board board, Board newBoard)
+{
+    var scoreGain = newBoard.Score - board.Score;
+    candidate.ScoreGain = scoreGain;
+    gamePath.ScoreGain += scoreGain;
+}
+```
+
+#### GatherPathStats
+
+Finally, this method is called at the end of the `GamePath` evaluation. In this example 
 ## Testing
 
 To test your implementation, edit the `Main()` method in `Game`, and instantiate your implementation of IPlayer in the `Game` constructor. 
