@@ -3,8 +3,10 @@
 
 Welcome to the Puzzle Block Challenge. This challenge is based on the [Block Puzzle](https://play.google.com/store/apps/details?id=com.differencetenderwhite.skirt) game. 
 
+> The goal is to drop blocks in order to create and destroy full lines on the screen both vertically and horizontally. Don't forget to keep the blocks from filling the screen in this addictive puzzle game.
+
 The purpose of this challenge is to code a new implementation of the `IPlayer` interface, which will beat all other 
-implementations by gaining the highest score. 
+implementations by gaining the highest score in this Console-based implementation of the game. 
 
 ## The Rules
 
