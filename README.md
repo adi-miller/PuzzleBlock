@@ -37,9 +37,11 @@ In `PuzzleBlockConsole` you'll find the following files and folders
 | --- | --- |
 |`Game.cs`|This is where the `Main()` flow of the game is executed. The ctor of `Game` takes an `IPlayer` implementation, so instantiating your `IPlayer` implementation and passing it on to the ctor happens here. In addition, this is where the seed for the `Random rnd` object is set, in favor of running the same game multiple times. The `Game` object holds a `Board` object, as well as a list of `Shape` objects. The main flow is in `Play()` which basically loops as long as `!board.GameOver()`.|
 |`Board.cs`|The `Board` object is where most of the logic of the Block Puzzle game is implemented. The `Board` object holds the `bool[][] Cells` which indicates if a cell is free or occupied, as well as a `int Score` member. As you build your `IPlayer` implementation, you will be using the various `Board` members and methods to evaluate the possible placements. The `Board` object has a copy constructor `public Board(Board source)` which can be used to evaluate different placement without effecting the real `Board`.|
-|asd|asd|
+|`Shapes.cs`|<img align="right" width="388" height="216" src="./Shapes.jpg">This class holds the definition of the various supported shapes. You typically do not need to work directly with the various shapes, because you can simply use the `Board.TryPlace()` method which receives a `Shape` object. However, you can access the `Type ShapeType`, `ShapeOrientation Orientation` and `bool[,] Bits` to better decide on placements.|
+|`.\Utils\`|This folder holds various helpful utilities such as `MaxArea` which calculates the largest available area on the board, and `Fragmentation` which calculates a fragmentation score. Feel free to alter these implementations and add new ones.|
+|`.\Players\`|This is where you should place your own `IPlayer` implementation, and can view other existing implementations.|
 
-## The Interface
+## The IPlayer Interface
 
 ```csharp
 interface IPlayer
