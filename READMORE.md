@@ -4,16 +4,16 @@ The solution consists of the following projects:
 
 | Project | Description
 | --- | --- |
-|`PuzzleBlockConsole`|A single project that holds the core implementation of the game, as well as the various `IPlayer` implementations. 
+|`PuzzleBlockConsole`|This project holds the core implementation of the game, as well as the various `IPlayer` implementations. 
 |`Tests`|A Tests project which includes tests for various components in the game|
 
 In `PuzzleBlockConsole` you'll find the following files and folders
 
 |File/Folder|Description
 | --- | --- |
-|`Game.cs`|This is where the `Main()` flow of the game is executed. The ctor of `Game` takes an `IPlayer` implementation, so instantiating your `IPlayer` implementation and passing it on to the ctor happens here. In addition, this is where the seed for the `Random rnd` object is set, in favor of running the same game multiple times. The `Game` object holds a `Board` object, as well as a list of `Shape` objects. The main flow is in `Play()` which basically loops as long as `!board.GameOver()`.|
-|`Board.cs`|The `Board` object is where most of the logic of the Block Puzzle game is implemented. The `Board` object holds the `bool[][] Cells` which indicates if a cell is free or occupied, as well as a `int Score` member. As you build your `IPlayer` implementation, you will be using the various `Board` members and methods to evaluate the possible placements. The `Board` object has a copy constructor `public Board(Board source)` which can be used to evaluate different placement without effecting the real `Board`.|
-|`Shapes.cs`|<img align="right" width="388" height="216" src="./Shapes.jpg">This class holds the definition of the various supported shapes. You typically do not need to work directly with the various shapes, because you can simply use the `Board.TryPlace()` method which receives a `Shape` object. However, you can access the `Type ShapeType`, `ShapeOrientation Orientation` and `bool[,] Bits` to better decide on placements.|
+|`Game.cs`|This is where the `Main()` flow of the game is executed. The ctor of `Game` takes an `IPlayer` implementation, so instantiating your `IPlayer` implementation and passing it on to the ctor happens here. In addition, this is where the seed for the `Random rnd` object is set, in favor of running the same game multiple times. The `Game` class holds a `board` object, as well as a list of `Shape` objects. The main flow is in `Play()` which basically loops as long as `!board.GameOver()`.|
+|`Board.cs`|The `Board` class is where most of the logic of the Block Puzzle game is implemented. A `board` object holds the `bool[][] Cells` which indicates if a cell is free or occupied, as well as a `int Score` member. As you build your `IPlayer` implementation, you will be using the various `Board` members and methods to evaluate the possible placements. The `Board` class has a copy constructor `public Board(Board source)` which can be used toinstantiate a temporary `board` object to evaluate different placement without effecting the real `board`.|
+|`Shapes.cs`|<img align="right" width="388" height="216" src="./Shapes.jpg">This class holds the definition of the various supported shapes. You typically do not need to work directly with the various shapes, because you can simply use the `Board.TryPlace()` method which receives a `shape` object. However, you can access the `Type ShapeType`, `ShapeOrientation Orientation` and `bool[,] Bits` to better decide on placements.|
 |`.\Utils\`|This folder holds various helpful utilities such as `MaxArea` which calculates the largest available area on the board, and `Fragmentation` which calculates a fragmentation score. Feel free to alter these implementations and add new ones.|
 |`.\Players\`|This is where you should place your own `IPlayer` implementation, and can view other existing implementations.|
 
@@ -33,6 +33,8 @@ interface IPlayer
 
 The only method that needs to be implemented is `MakeAMove()`. This method is called by the game continuously, as long as it is still possible to place a `Shape` on the game board. 
 The implementation receives a `board` object, as well as an `IDictionary<int, Shape> shapes`, and needs to output the chosen `shapeId` to place and a `placement` string descriptor that specifies where to place the `shape` on the board. 
+
+> <img align="right" src="./Placement.jpg">For example, returning `2` in `shapeId` and `b5` in placement, will result in attempting to place the second shape in the `shapes` dictionary starting from the upper left corner of the shape in cell `b5`. 
 
 The method receives the following parameters:
 
