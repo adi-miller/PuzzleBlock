@@ -7,22 +7,29 @@ namespace PuzzleBlock
 {
     class Game
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            var game = new Game();
             var seed = DateTime.Now.Millisecond;
-            game.rnd = new Random(seed);
             var start = DateTime.Now;
+
+            var game = new Game(new FullEvalPlayer());
+
+            game.rnd = new Random(seed);
             game.Play();
+
             Console.WriteLine("Game seed: " + seed);
             Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
             Console.ReadLine();
         }
 
+        public Game(IPlayer player)
+        {
+            this.player = player;
+        }
+
         private Random rnd;
         private Board board = new Board();
-        //private IPlayer player = new ManualPlayer();
-        private IPlayer player = new FullEvalPlayer();
+        private IPlayer player;
         private IGameDrawer renderer = new ConsoleGameDrawer();
         private IDictionary<int, Shape> shapes = new Dictionary<int, Shape>();
 

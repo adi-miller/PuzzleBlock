@@ -12,7 +12,7 @@ namespace PuzzleBlock
 
         public int Placements { get { return placements; } }
         public int AvgCellCount { get { return cellCountSum / placements; } }
-        public IList<int> Lines { get; set; }
+        public int[] Lines { get; set; }
 
         public void AddCellCount(int cellCount)
         {
@@ -22,11 +22,7 @@ namespace PuzzleBlock
 
         public BoardStats()
         {
-            Lines = new List<int>();
-            for (int i = 0; i < 8; i++)
-            {
-                Lines.Add(0);
-            }
+            Lines = new int[8];
         }
     }
 

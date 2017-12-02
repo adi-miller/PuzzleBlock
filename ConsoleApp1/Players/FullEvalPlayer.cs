@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using ConsoleApp1.Utils;
@@ -24,6 +25,8 @@ namespace PuzzleBlock.Players
             shapeId = 0;
             placement = "";
             possibleMoves = 0;
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
 
             if (CalcMoves.Count == 0)
             {
@@ -39,7 +42,10 @@ namespace PuzzleBlock.Players
 
                 Console.WriteLine();
             }
-
+            stopWatch.Stop();
+            if (possibleMoves > 0)
+                renderer.ShowMessage("Throughput: " +
+                                     (float) possibleMoves / (float) (stopWatch.ElapsedMilliseconds / 1000) + "/sec");
             shapeId = CalcMoves[0].ShapeId;
             placement = CalcMoves[0].Placement;
             CalcMoves.RemoveAt(0);
@@ -114,7 +120,7 @@ namespace PuzzleBlock.Players
             //var bestList = (from x in paths orderby x.FragScore descending, x.MaxArea descending, x.CellCount, x.ScoreGain descending select x); //2011, 188, 15 47|18|2|1 
             //var bestList = (from x in paths orderby x.Rank descending select x); 
 
-            if (fragScore.MaxArea < 0.22F)
+            if (fragScore.MaxArea < 0.32F)
                 return maxArea;
             else
             {
@@ -142,6 +148,53 @@ namespace PuzzleBlock.Players
             gamePath.MaxArea = (float)MaxArea.MaximalRectangle(board.Cells)/64;
             gamePath.FragScore = Fragmentation.GetFragmentationScore(board.Cells);
         }
+    }
 
+    class GamePath
+    {
+        public int CellsGain { get; set; }
+        public float CellGainNorm => ((float)(1 - ((float)CellsGain - (-43)) / ((float)27 - (-43))));
+        public int ScoreGain { get; set; }
+        public float ScoreGainNorm => ((float)(ScoreGain - 0)) / (127);
+        public int CellCount { get; set; }
+        public float PlacementScore { get; set; }
+        public float MaxArea { get; set; }
+        public float FragScore { get; set; }
+
+
+        //public float Rank => (float)((MaxArea * 0.05) + (FragScore * 0.8) + (ScoreGainNorm * 0.05)); // 2011, 188, 15 47|18|2|1
+        public float Rank => (float)((MaxArea * 0.1) + (FragScore * 0.8) + (ScoreGainNorm * 0.1)); // 2617, 239, 14 70|20|5
+
+        //public float Rank => (float)((MaxArea * 0.0) + (FragScore * 1)); // 2272, 212, 18 60|17|3|1
+        //public float Rank => (float)((MaxArea * 0.1) + (FragScore * 0.9)); // 3138, 281, 13 82|20|7|1
+        //public float Rank => (float)((MaxArea * 0.3) + (FragScore * 0.7)); // 317, 35, 16 13|1
+        //public float Rank => (float)((MaxArea * 0.5) + (FragScore * 0.5)); // 1911, 188, 19 67|10|1|1
+        //public float Rank => (float)((MaxArea * 0.6) + (FragScore * 0.4)); // 1921, 188, 14 63|11|3
+        //public float Rank => (float)((MaxArea * 0.7) + (FragScore * 0.3)); // 1843, 186, 17 66|10|2
+        //public float Rank => (float)((ScoreGainNorm * 0.69) + (CellGainNorm * 0.3) + (PlacementScore * 0.01)); // 675;62;19 16|6|1|0
+        //public float Rank => (float)((ScoraGainNorm * 0.9) + (CellGainNorm * 0.1)); // 209
+        //public float Rank => (float)((ScoraGainNorm * 0.8) + (CellGainNorm * 0.2)); // 209
+
+        public IList<Candidate> Moves { get; set; }
+
+        public GamePath()
+        {
+            Moves = new List<Candidate>();
+            PlacementScore = 1;
+        }
+
+        public GamePath(GamePath source) : this()
+        {
+            if (source != null)
+            {
+                foreach (var candidate in source.Moves)
+                    Moves.Add(candidate);
+
+                CellsGain = source.CellsGain;
+                ScoreGain = source.ScoreGain;
+                CellCount = source.CellCount;
+                PlacementScore = source.PlacementScore;
+            }
+        }
     }
 }

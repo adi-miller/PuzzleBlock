@@ -34,7 +34,7 @@ namespace PuzzleBlock.Utils
         public static int MaxAreaHist(int[] heights)
         {
             int n = heights.Length;
-            Stack<int> stack = new Stack<int>();
+            Stack<int> stack = new Stack<int>(64);
             stack.Push(0);
             int maxRect = heights[0];
             int top = 0;

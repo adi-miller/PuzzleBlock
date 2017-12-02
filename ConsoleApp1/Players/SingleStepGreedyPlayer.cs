@@ -41,7 +41,6 @@ namespace PuzzleBlock.Players
                     }
             }
         }
-
     }
 
     class CellsSingleStepGreedyPlayer : SingleStepGreedyPlayer
