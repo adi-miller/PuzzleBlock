@@ -31,12 +31,12 @@ The solution consists of the following projects:
 |`PuzzleBlockConsole`|A single project that holds the core implementation of the game, as well as the various `IPlayer` implementations. 
 |`Tests`|A Tests project which includes tests for various components in the game|
 
-`PuzzleBlockConsole` consists of the following elements:
+In `PuzzleBlockConsole` you'll find the following files and folders
 
-|Element | Description
+|File/Folder|Description
 | --- | --- |
-|asd|asd|
-|asd|asd|
+|`Game.cs`|This is where the `Main()` flow of the game is executed. The ctor of `Game` takes an `IPlayer` implementation, so instantiating your `IPlayer` implementation and passing it on to the ctor happens here. In addition, this is where the seed for the `Random rnd` object is set, in favor of running the same game multiple times. The `Game` object holds a `Board` object, as well as a list of `Shape` objects. The main flow is in `Play()` which basically loops as long as `!board.GameOver()`.|
+|`Board.cs`|The `Board` object is where most of the logic of the Block Puzzle game is implemented. The `Board` object holds the `bool[][] Cells` which indicates if a cell is free or occupied, as well as a `int Score` member. As you build your `IPlayer` implementation, you will be using the various `Board` members and methods to evaluate the possible placements. The `Board` object has a copy constructor `public Board(Board source)` which can be used to evaluate different placement without effecting the real `Board`.|
 |asd|asd|
 
 ## The Interface
