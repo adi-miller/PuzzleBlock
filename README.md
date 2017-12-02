@@ -37,6 +37,8 @@ In this challenge, the main measure is runtime duration. We will pick a single `
 
 This challenge is similar to the Score Challenge, but will require the implementation to use some form of Machine Learning technique in order to beat the highest score.
 
+Hint: there are lots of matrix-based operations here, so there is are a lot of parallelism opportunities. 
+
 ## What's Next?
 
 To get started, clone PuzzleBlock and start coding. For further reading:
