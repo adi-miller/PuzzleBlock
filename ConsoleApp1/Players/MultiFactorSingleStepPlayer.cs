@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ConsoleApp1.Utils;
 using PuzzleBlock.Utils;
 
 namespace PuzzleBlock.Players
@@ -28,22 +28,24 @@ namespace PuzzleBlock.Players
                             ScoreGain = (newBoard.Score - shape.Value.Score) - board.Score,
                             CellsGain = newBoard.CellCount() - board.CellCount(),
                             LinesScore = newBoard.LinesScore(),
-                            MaxArea = MaxArea.MaximalRectangle(newBoard.Cells)
+                            MaxArea = MaxArea.MaximalRectangle(newBoard.Cells),
+                            FragScore = Fragmentation.GetFragmentationScore(newBoard.Cells)
                         };
                         candidates.Add(candidate);
-                        if (candidate.ScoreGain < 0)
-                            throw new Exception("Inconceivable");
                     }
                 }
             }
 
-            //var c = from x in candidates orderby x.ScoreGain descending, x.CellsGain, x.LinesScore descending, x.PlacementScore select x;
-            var c = from x in candidates orderby x.MaxArea descending select x;
+            var maxAreaList = from x in candidates orderby x.MaxArea descending, x.FragScore descending select x;
+            var fragScoreList = from x in candidates orderby x.FragScore descending, x.MaxArea descending select x;
 
-            var w = c.First<Candidate>();
+            var maxArea = maxAreaList.First();
+            var fragScore = fragScoreList.First();
 
-            placement = w.Placement;
-            shapeId = w.ShapeId;
+            var final = fragScore.MaxArea < 0.32F ? maxArea : fragScore;
+
+            placement = final.Placement;
+            shapeId = final.ShapeId;
         }
     }
 
@@ -83,5 +85,6 @@ namespace PuzzleBlock.Players
             }
         }
         public int MaxArea { get; set; }
+        public float FragScore { get; set; }
     }
 }
