@@ -15,7 +15,7 @@ __The purpose of this challenge is to code a _new implementation_ of the `IPlaye
     * Do NOT, for example, alter the definition of `Shape` or the way the score is calculated
 * Fork the main branch and push your implementation there. The implementation will be compared to master to make sure no cheats were introduced
 * You can start from one of the built-in implementation of `IPlayer`, including `SingleStepGreedyPlayer`, `MultiFactorSingleStepPlayer` or `FullEvalPlayerBase` and modify it, or
-* You can start from your own clean implementation of `IPlayer` directly. For more information, see [How to implement the Player](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#how-to-implement-the-player).  
+* You can start from your own clean implementation of `IPlayer` directly. For more information, see [How to implement the Player](./READMORE.md#how-to-implement-the-player).  
 
 ## The Challenges
 
@@ -41,7 +41,7 @@ This challenge is similar to the Score Challenge, but will require the implement
 
 To get started, clone PuzzleBlock and start coding. For further reading:
 
-* [The Solution Structure](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#the-solution-structure)
-* [The IPlayer Interface](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#the-iplayer-interface)
-* [How to implement the Player](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#how-to-implement-the-player)
-* [Testing](https://github.com/adi-miller/PuzzleBlock/blob/Deep/READMORE.md#testing)
+* [The Solution Structure](./READMORE.md#the-solution-structure)
+* [The IPlayer Interface](./READMORE.md#the-iplayer-interface)
+* [How to implement the Player](./READMORE.md#how-to-implement-the-player)
+* [Testing](./READMORE.md#testing)
