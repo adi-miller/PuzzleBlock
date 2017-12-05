@@ -43,10 +43,6 @@ namespace PuzzleBlock
             {
                 Cells[x] = new bool[8];
                 Colors[x] = new ConsoleColor[8];
-                for (int y = 0; y <= 7; y++)
-                {
-                    Cells[x][y] = false;
-                }
             }
         }
 

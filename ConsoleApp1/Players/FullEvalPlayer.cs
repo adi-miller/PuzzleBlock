@@ -18,17 +18,20 @@ namespace PuzzleBlock.Players
     {
         private IList<Candidate> CalcMoves = new List<Candidate>();
 
+        private int possibleMoves;
+
         public void MakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes,
             IGameDrawer renderer)
         {
             shapeId = 0;
             placement = "";
-            possibleMoves = 0;
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
 
             if (CalcMoves.Count == 0)
             {
+                possibleMoves = 0;
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
+
                 var gamePaths = new List<GamePath>();
 
                 renderer.ShowUpdateMessageStart("Calculating possible moves... ");
@@ -40,17 +43,15 @@ namespace PuzzleBlock.Players
                     CalcMoves.Add(cand);
 
                 Console.WriteLine();
+                stopWatch.Stop();
+                if (possibleMoves > 0)
+                    renderer.ShowMessage("Throughput: " +
+                                         (float)possibleMoves / (float)(stopWatch.ElapsedMilliseconds / 1000) + "/sec");
             }
-            stopWatch.Stop();
-            if (possibleMoves > 0)
-                renderer.ShowMessage("Throughput: " +
-                                     (float) possibleMoves / (float) (stopWatch.ElapsedMilliseconds / 1000) + "/sec");
             shapeId = CalcMoves[0].ShapeId;
             placement = CalcMoves[0].Placement;
             CalcMoves.RemoveAt(0);
         }
-
-        private int possibleMoves = 0;
 
         private void InnerMakeAMove(Board board, IDictionary<int, Shape> shapes,
             IList<GamePath> gamePaths, GamePath startGamePath, IGameDrawer renderer)
@@ -89,6 +90,7 @@ namespace PuzzleBlock.Players
                             foreach (var sh in shapes)
                                 if (sh.Key != shape.Key)
                                     newShapes.Add(sh.Key, sh.Value);
+
                             InnerMakeAMove(newBoard, newShapes, gamePaths, gamePath, renderer);
                         }
                     }
@@ -108,13 +110,14 @@ namespace PuzzleBlock.Players
     {
         public override GamePath SelectBestPath(List<GamePath> paths)
         {
-            var maxAreaList = from x in paths orderby x.MaxArea descending, x.FragScore descending select x;
-            var fragScoreList = from x in paths orderby x.FragScore descending, x.MaxArea descending select x;
+            var maxAreaList = from x in paths orderby x.MaxArea descending, x.ScoreGain descending select x;
+            var fragScoreList = from x in paths orderby x.FragScore descending, x.ScoreGain descending select x;
 
             var maxArea = maxAreaList.First();
             var fragScore = fragScoreList.First();
 
-            return fragScore.MaxArea < 0.22F ? maxArea : fragScore;
+            //return maxArea.FragScore < 0.52F ? maxArea : fragScore;
+            return fragScore.MaxArea < 0.32F ? maxArea : fragScore;
         }
 
         public override void GatherStepStats(Candidate candidate, GamePath gamePath, Board board, Board newBoard)
