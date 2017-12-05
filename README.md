@@ -5,7 +5,7 @@ Welcome to the Puzzle Block Challenge. This challenge is based on the [Block Puz
 
 > The goal is to drop blocks in order to create and destroy full lines on the screen both vertically and horizontally. Don't forget to keep the blocks from filling the screen in this addictive puzzle game.
 
-_This_ challenge provides a working implementation of the game, built in C# running on Windows. The implementation comes with a few different versions of the player, each performing differently. The player implementation is modeled in classes that derive from the `IPlayer` interface, which are instntiated and passed to the `Game` object. 
+_This_ challenge provides a working implementation of the game, built in C#. The implementation comes with a few different versions of the player, each performing differently. The player implementation is modeled in classes that derive from the `IPlayer` interface, which are instantiated and passed to the `Game` object. 
 
 __The purpose of this challenge is to code a _new implementation_ of the `IPlayer` interface, which will beat all other  implementations by gaining the highest score__. 
 
@@ -27,7 +27,7 @@ In this challenge, the main measure is the final score. Each implementation will
 
 Each run will be executed using a predetermined seed, so that it will be possible to compare results in identical conditions. 
 
-When evaluating the different implementations, the program will be executed 3 times, each time with a different seed. Only the seed that produced the highest score (for each implementation) will be considered. 
+When evaluating the different implementations, the program will be executed 5 times, each time with a different seed. Only the seed that produced the highest score (for each implementation) will be considered. 
 
 ### The Speed Challenge
 
@@ -36,8 +36,6 @@ In this challenge, the main measure is runtime duration. We will pick a single `
 ### The ML Challenge
 
 This challenge is similar to the Score Challenge, but will require the implementation to use some form of Machine Learning technique in order to beat the highest score.
-
-Hint: there are lots of matrix-based operations here, so there is are a lot of parallelism opportunities. 
 
 ## What's Next?
 
