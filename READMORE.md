@@ -60,10 +60,10 @@ public void MakeAMove(out int shapeId, out string placement,
 The method receives the following parameters:
 
 * `out int shapeId`: The implementation must output a value between 1 and 3 to the caller, which will indicate which shape needs to be placed in this turn. Use the `key` from the `shapes` dictionary to determine the `shapeId`
-* `out string placement`: The implementation must output a 2 char string indicating the location to place the shape. The first char should be alphanumeric 'a'-'h' and the second char should be numeric '1'-'8'. For example, return `b4` to place the shape starting from the upper-left corner in b4.
+* `out string placement`: The implementation must output a 2 char string indicating the location to place the shape. The first char should be alphanumeric `a-h` and the second char should be numeric `1-8`. For example, return `b5` to place the shape starting from the upper-left corner in b5.
 * `Board board`: The `board` object includes all the information about the current state of the `board`, as well as different methods to test and manipulate the board. 
 * `IDictionary<int, Shape> shapes`: A dictionary of the currently available shapes, that needs to be placed in this turn. The dictionary maps between the `int shapeId` and the actual `shape` object.
-* `IGameDrawer renderer`: Can be used to render output to the Console using the `ConsoleGameDrawer` implementation
+* `IGameDrawer renderer`: Can be used to render output to the Console using the `ConsoleGameDrawer` implementation.
 
 ## How to implement the Player
 
@@ -77,7 +77,7 @@ For reference, see the implementation of `ManualPlayer` that reads input from th
 
 ### Single Step Greedy
 
-Alternatively, you can inherit from the `abstract` `SingleStepGreedyPlayer` class. 
+Alternatively, you can inherit from the abstract `SingleStepGreedyPlayer` class. 
 
 In this implementation, the `MakeAMove()` method iterates over all possible shapes in any specific turn, and attempts to place it in any possible location on the board. For each possible placement, the implementation calls the `Gain()` abstract method, which you need to implement with your own logic of calculating the <i>gain</i> of that specific placement. Then that gain is compared to the last know <i>best</i> gain, using the implementation of `Eval()`. In `Eval()` you can specify how to evaluate the current gain with the last know best gain. If the new gain is "better", it will become the last know best gain. 
 
@@ -127,11 +127,11 @@ class ScoreSingleStepGreedyPlayer : SingleStepGreedyPlayer
 }
 ```
 
-The advantage of this implementation is that it is relatively fast, but the disadvantage is that it only evaluates one step at a time. 
+The advantage of this implementation is that it is relatively fast, but the disadvantage is that it only evaluates one order of shape placement (iterates by the order of the shapes in the dictionary). At the worst case, assuming all 3 shapes are a `Singler`, and the board is empty, the method will evaluate `(8x8)+(8x8-1)+(8x8-2) = 182` times. 
 
 ### Full Evaluation
 
-To do a full analysis of all possible placements given all 3 shapes in each turn, you can derive your implementation from `FullEvalPlayerBase`. This implementation recursively goes over all possible placements for all 3 shapes in any order, and gives you a chance to calculate stats for each placement and for each `GamePath`. 
+To do a full analysis of all possible placements given all 3 shapes in each turn, you can derive your implementation from `FullEvalPlayerBase`. This implementation recursively goes over all possible placements for all 3 shapes in any order, and gives you a chance to calculate stats for each placement and for each `GamePath`. At the worst case, assuming all 3 shapes are a `Singler`, and the board is empty, the method will evaluate `(8x8)^3 x 3! = 1,572,864` times. 
 
 A `GamePath` is essentially a list of up to 3 `Moves` that is calculate by the implementation. 
 
