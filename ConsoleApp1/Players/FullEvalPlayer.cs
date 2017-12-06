@@ -110,14 +110,9 @@ namespace PuzzleBlock.Players
     {
         public override GamePath SelectBestPath(List<GamePath> paths)
         {
-            var maxAreaList = from x in paths orderby x.MaxArea descending, x.ScoreGain descending select x;
-            var fragScoreList = from x in paths orderby x.FragScore descending, x.ScoreGain descending select x;
+            var topScorePath = from x in paths orderby x.ScoreGain descending, x.CellCount descending, x.PlacementScore select x;
 
-            var maxArea = maxAreaList.First();
-            var fragScore = fragScoreList.First();
-
-            //return maxArea.FragScore < 0.52F ? maxArea : fragScore;
-            return fragScore.MaxArea < 0.32F ? maxArea : fragScore;
+            return topScorePath.First();
         }
 
         public override void GatherStepStats(Candidate candidate, GamePath gamePath, Board board, Board newBoard)
@@ -150,7 +145,6 @@ namespace PuzzleBlock.Players
         public float PlacementScore { get; set; }
         public float MaxArea { get; set; }
         public float FragScore { get; set; }
-        public float Rank => (float)((MaxArea * 0.1) + (FragScore * 0.8) + (ScoreGainNorm * 0.1)); 
 
         public IList<Candidate> Moves { get; set; }
 
