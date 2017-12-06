@@ -63,7 +63,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleApp1\PuzzleBlockConsole.csproj">
+    <ProjectReference Include="..\BlockPuzzleConsole\PuzzleBlockConsole.csproj">
       <Project>{65f66801-b3a8-4628-a053-1b0111f969f2}</Project>
       <Name>PuzzleBlockConsole</Name>
     </ProjectReference>
