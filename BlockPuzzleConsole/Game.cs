@@ -8,7 +8,7 @@ namespace PuzzleBlock
     {
         static void Main()
         {
-            var seed = DateTime.Now.Millisecond;
+            var seed = 502;
             var start = DateTime.Now;
 
             var game = new Game(new FullEvalPlayer());

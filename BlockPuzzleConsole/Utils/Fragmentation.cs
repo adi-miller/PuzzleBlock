@@ -5,10 +5,10 @@
         public static float GetFragmentationScore(bool[][] matrix)
         {
             var frags = 0;
+            var iHold = false;
+            var jHold = false;
             for (int i = 0; i < matrix.Length; i++)
             {
-                var iHold = false;
-                var jHold = false;
                 for (int j = 0; j < matrix[i].Length; j++)
                 {
                     if (iHold != matrix[i][j])
@@ -20,7 +20,7 @@
                 }
             }
 
-            return 1-(float)frags/120;
+            return 1-(float)frags/114;
         }
 
         public static int SurroundedSignals(bool[][] matrix)
