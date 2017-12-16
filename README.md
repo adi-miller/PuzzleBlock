@@ -1,3 +1,7 @@
+## Adi Miller - 16 Dec 2017
+
+<img src="./High Score.jpg">
+
 # The Puzzle Block <i>*Coding*</i> Challenge
 <img align="right" width="337" height="330" alt="Block Puzzle Console" src="./BlockPuzzleConsole.jpg">
 
