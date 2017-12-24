@@ -110,7 +110,7 @@ namespace PuzzleBlock.Players
     {
         public override GamePath SelectBestPath(List<GamePath> paths)
         {
-            var topScorePath = from x in paths orderby x.ScoreGain descending, x.CellCount descending, x.PlacementScore select x;
+            var topScorePath = from x in paths orderby x.ScoreGain descending, x.CellCount, x.PlacementScore select x;
 
             return topScorePath.First();
         }
