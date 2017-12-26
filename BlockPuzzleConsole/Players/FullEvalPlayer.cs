@@ -110,7 +110,7 @@ namespace PuzzleBlock.Players
     {
         public override GamePath SelectBestPath(List<GamePath> paths)
         {
-            var topScorePath = from x in paths orderby x.ScoreGain descending, x.CellCount descending, x.PlacementScore select x;
+            var topScorePath = from x in paths orderby x.Tsiun descending select x;
 
             return topScorePath.First();
         }
@@ -132,6 +132,53 @@ namespace PuzzleBlock.Players
         {
             gamePath.MaxArea = (float)MaxArea.MaximalRectangle(board.Cells)/64;
             gamePath.FragScore = Fragmentation.GetFragmentationScore(board.Cells);
+            gamePath.Tsiun = GetTsiun(board);
+        }
+
+        public int GetTsiun(Board myBoard)
+        {
+            int[,] myScore = new int[8, 8];
+
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    myScore[i, j] = 0;
+                    if (!myBoard.Cells[i][j])
+                    {
+                        if (j > 0 && !myBoard.Cells[i][j - 1])
+                            myScore[i, j] += 2;
+                        if (j < 7 && !myBoard.Cells[i][j + 1])
+                            myScore[i, j] += 2;
+                        if (i > 0 && j > 0 && !myBoard.Cells[i - 1][j - 1])
+                            myScore[i, j]++;
+                        if (i > 0 && !myBoard.Cells[i - 1][j])
+                            myScore[i, j] += 2;
+                        if (j < 7 && i > 0 && !myBoard.Cells[i - 1][j + 1])
+                            myScore[i, j]++;
+                        if (i < 7 && !myBoard.Cells[i + 1][j])
+                            myScore[i, j] += 2;
+                        if (j > 0 && i < 7 && !myBoard.Cells[i + 1][j - 1])
+                            myScore[i, j]++;
+                        if (j < 7 && i < 7 && !myBoard.Cells[i + 1][j + 1])
+                            myScore[i, j]++;
+                        if (j < 6 && !myBoard.Cells[i][j + 2] && !myBoard.Cells[i][j + 1])
+                            myScore[i, j] += 3;
+                        if (j > 1 && !myBoard.Cells[i][j - 2] && !myBoard.Cells[i][j - 1])
+                            myScore[i, j] += 3;
+                        if (i < 6 && !myBoard.Cells[i + 2][j] && !myBoard.Cells[i + 1][j])
+                            myScore[i, j] += 3;
+                        if (i > 1 && !myBoard.Cells[i - 2][j] && !myBoard.Cells[i - 1][j])
+                            myScore[i, j] += 3;
+                        if (j > 1 && j < 6 && !myBoard.Cells[i][j - 1] && !myBoard.Cells[i][j + 1] && !myBoard.Cells[i][j - 2] && !myBoard.Cells[i][j + 2])
+                            myScore[i, j] += 2;
+                    }
+                }
+            int Score = 0;
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                    Score += myScore[i, j];
+            return Score;
+
         }
     }
 
@@ -144,6 +191,7 @@ namespace PuzzleBlock.Players
         public int CellCount { get; set; }
         public float PlacementScore { get; set; }
         public float MaxArea { get; set; }
+        public int Tsiun { get; set; }
         public float FragScore { get; set; }
 
         public IList<Candidate> Moves { get; set; }
