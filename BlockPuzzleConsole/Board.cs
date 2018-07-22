@@ -20,41 +20,45 @@ namespace PuzzleBlock
             cellCountSum += cellCount;
         }
 
-        public BoardStats()
+        public BoardStats(int boardSize)
         {
-            Lines = new int[8];
+            Lines = new int[boardSize];
         }
     }
 
     public class Board
     {
+        public int BoardSize { get; set;  }
         public bool[][] Cells { get; }
         public ConsoleColor[][] Colors { get; }
         public int Score { get; set; }
-        public BoardStats Stats = new BoardStats();
+        public BoardStats Stats;
 
-        public Board()
+        public Board(int boardSize)
         {
+            BoardSize = boardSize;
+            Stats = new BoardStats(boardSize);
+
             Score = 0;
 
-            Cells = new bool[8][];
-            Colors = new ConsoleColor[8][];
-            for (int x = 0; x <= 7; x++)
+            Cells = new bool[BoardSize][];
+            Colors = new ConsoleColor[BoardSize][];
+            for (int x = 0; x <= (BoardSize-1); x++)
             {
-                Cells[x] = new bool[8];
-                Colors[x] = new ConsoleColor[8];
+                Cells[x] = new bool[BoardSize];
+                Colors[x] = new ConsoleColor[BoardSize];
             }
         }
 
-        public Board(Board source) : this()
+        public Board(Board source) : this(source.BoardSize)
         {
             if (source == null)
                 return;
 
             Score = source.Score;
 
-            for (int x = 0; x <= 7; x++)
-                for (int y = 0; y <= 7; y++)
+            for (int x = 0; x <= BoardSize - 1; x++)
+                for (int y = 0; y <= BoardSize - 1; y++)
                 {
                     Cells[x][y] = source.Cells[x][y];
                     Colors[x][y] = source.Colors[x][y];
@@ -66,7 +70,7 @@ namespace PuzzleBlock
         private bool CanFit(Shape shape, int num, int letter)
         {
             // Check if not occupied already and if not out of bound
-            if (((shape.Bits.GetUpperBound(0) + num) >= 8) || (((shape.Bits.GetUpperBound(1) + letter) >= 8)))
+            if (((shape.Bits.GetUpperBound(0) + num) >= BoardSize) || (((shape.Bits.GetUpperBound(1) + letter) >= BoardSize)))
                 return false;
 
             for (int x = 0; x <= shape.Bits.GetUpperBound(0); x++)
@@ -89,7 +93,7 @@ namespace PuzzleBlock
             int placeLetter = placement[0] - 97;
             int placeNumber = placement[1] - 49;
 
-            if (placeLetter < 0 || placeLetter > 7 || placeNumber < 0 || placeLetter > 7)
+            if (placeLetter < 0 || placeLetter > (BoardSize-1) || placeNumber < 0 || placeLetter > (BoardSize-1))
                 return false;
 
             if (!CanFit(shape, placeNumber, placeLetter))
@@ -124,11 +128,11 @@ namespace PuzzleBlock
             // Check cleanup
             var lines = new List<int>();
             var rows = new List<int>();
-            for (int i = 0; i <= 7; i++)
+            for (int i = 0; i <= (BoardSize-1); i++)
             {
                 var line = Cells[i][0];
                 var row = Cells[0][i];
-                for (int j = 0; j < 8; j++)
+                for (int j = 0; j < BoardSize; j++)
                 {
                     line = line && Cells[i][j];
                     row = row && Cells[j][i];
@@ -162,7 +166,7 @@ namespace PuzzleBlock
             Stats.Lines[total-1]++;
 
             // Clear lines
-            for (int x = 0; x <= 7; x++)
+            for (int x = 0; x <= (BoardSize-1); x++)
             {
                 foreach (var line in lines)
                 {
@@ -181,8 +185,8 @@ namespace PuzzleBlock
             if (shape == null)
                 return false;
 
-            for (int x = 0; x <= 7; x++)
-                for (int y = 0; y <= 7; y++)
+            for (int x = 0; x <= (BoardSize-1); x++)
+                for (int y = 0; y <= (BoardSize-1); y++)
                 {
                     if (CanFit(shape, y, x))
                         return true;
@@ -206,8 +210,8 @@ namespace PuzzleBlock
 
         public void Transpose()
         {
-            for (int x = 0; x <= 7; x++)
-                for (int y = x + 1; y <= 7; y++)
+            for (int x = 0; x <= (BoardSize-1); x++)
+                for (int y = x + 1; y <= (BoardSize-1); y++)
                 {
                     var hold = Cells[x][y];
                     Cells[x][y] = Cells[y][x];
@@ -219,8 +223,8 @@ namespace PuzzleBlock
         {
             int maxLen = 0;
             int curLen = 0;
-            for (int x = 0; x <= 7; x++)
-                for (int y = 0; y <= 7; y++)
+            for (int x = 0; x <= (BoardSize-1); x++)
+                for (int y = 0; y <= (BoardSize-1); y++)
                 {
                     if (Cells[x][y])
                         curLen++;
@@ -247,9 +251,9 @@ namespace PuzzleBlock
         public int CellCount()
         {
             int cells = 0;
-            for (int x = 0; x <= 7; x++)
+            for (int x = 0; x <= (BoardSize-1); x++)
             {
-                for (int y = 0; y <= 7; y++)
+                for (int y = 0; y <= (BoardSize-1); y++)
                 {
                     if (Cells[x][y])
                         cells++;

@@ -19,18 +19,39 @@ namespace PuzzleBlock
 
     public class ConsoleGameDrawer : IGameDrawer
     {
+        private Board board;
+        private void drawBoarderLines(string left, string middle, string right, bool isLetters = false)
+        {
+            Console.Write("  ");
+            for (int x = 0; x <= (board.BoardSize - 1); x++)
+            {
+                if (isLetters)
+                    Console.Write("  " + (char)(65 + x) + " ");
+                else
+                if (x == 0)
+                    Console.Write(left);
+                else
+                {
+                    Console.Write(middle);
+                    if (x == (board.BoardSize-1))
+                        Console.Write(right);
+                }
+            }
+            Console.WriteLine();
+        }
         public void DrawBoard(Board board)
         {
+            this.board = board;
             Console.WriteLine("   --- Turn: {0,3} - Score: {1,4} ---", board.Stats.Placements, board.Score);
             Console.WriteLine("");
-            Console.WriteLine("    A   B   C   D   E   F   G   H");
-            Console.WriteLine("  ┌───┬───┬───┬───┬───┬───┬───┬───┐");
-            for (int x = 0; x <= 7; x++)
+            drawBoarderLines("", "", "", true);
+            drawBoarderLines("┌───", "┬───", "┐");
+            for (int x = 0; x <= (board.BoardSize-1); x++)
             {
                 if (x != 0)
-                    Console.WriteLine("  ├───┼───┼───┼───┼───┼───┼───┼───┤");
+                    drawBoarderLines("├───", "┼───", "┤");
                 Console.Write((x+1)+" │");
-                for (int y = 0; y <= 7; y++)
+                for (int y = 0; y <= (board.BoardSize - 1); y++)
                 {
                     if (board.Cells[x][y])
                     {
@@ -42,14 +63,14 @@ namespace PuzzleBlock
                     {
                         Console.Write("   ");
                     }
-                    if (y < 7)
+                    if (y < (board.BoardSize - 1))
                         Console.Write("│");
                     else
                         Console.WriteLine("│ "+(x+1));
                 }
             }
-            Console.WriteLine("  └───┴───┴───┴───┴───┴───┴───┴───┘");
-            Console.WriteLine("    A   B   C   D   E   F   G   H");
+            drawBoarderLines("└───", "┴───", "┘");
+            drawBoarderLines("", "", "", true);
             Console.WriteLine();
         }
 
@@ -81,9 +102,10 @@ namespace PuzzleBlock
         {
             while (true)
             {
-                Console.Write("Choose placement [A-H][1-8]: ");
+                Console.Write("Choose placement [A-"+(char)(64+board.BoardSize)+
+                    "][1-"+ board.BoardSize + "]: ");
                 var res = Console.ReadLine()?.ToLower();
-                if (res != null && res[0] >= 'a' && res[0] <= 'h')
+                if (res != null && res[0] >= 'a' && res[0] <= (char)96+ board.BoardSize)
                     if ((int)res[1] >= 49 && (int)res[1] <= 57)
                         return res;
             }
@@ -120,7 +142,7 @@ namespace PuzzleBlock
             Console.WriteLine(" + Score: {0}", board.Score);
             Console.WriteLine(" + Placements: {0}", board.Stats.Placements);
             Console.WriteLine(" + CellCount Average: {0}", board.Stats.AvgCellCount);
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < board.BoardSize; i++)
                 Console.WriteLine(" + {0} Lines Cleared {1,3}. Per placement: {2}", i+1, board.Stats.Lines[i], (float)(board.Stats.Lines[i])/board.Stats.Placements);
         }
 

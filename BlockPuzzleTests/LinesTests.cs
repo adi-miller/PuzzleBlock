@@ -10,7 +10,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void FirstSingleLineFromStart()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[0][0] = true;
             board.Cells[0][1] = true;
@@ -22,7 +22,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void FirstSingleLineInMiddle()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[0][2] = true;
             board.Cells[0][3] = true;
@@ -35,7 +35,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void FirstSingleLineAtEnd()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[0][3] = true;
             board.Cells[0][4] = true;
@@ -49,7 +49,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void MiddleSingleLineAtEnd()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[3][3] = true;
             board.Cells[3][4] = true;
@@ -63,7 +63,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void MiddleSingleLineAtMiddle()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[3][3] = true;
             board.Cells[3][4] = true;
@@ -76,7 +76,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void MiddleSingleFullLine()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[3][0] = true;
             board.Cells[3][1] = true;
@@ -93,7 +93,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TwoThree()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[7][1] = true;
             board.Cells[7][2] = true;
@@ -107,7 +107,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TwoFour()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[7][1] = true;
             board.Cells[7][2] = true;
@@ -122,7 +122,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void OneFive()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[7][0] = true;
             board.Cells[7][2] = true;
@@ -137,7 +137,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void FiveTwo()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[7][0] = true;
             board.Cells[7][1] = true;
@@ -153,7 +153,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void CrossedFullLines()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[3][0] = true;
             board.Cells[3][1] = true;

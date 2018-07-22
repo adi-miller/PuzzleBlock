@@ -16,8 +16,8 @@ namespace UnitTestProject1
         [TestMethod]
         public void TryPlaceInvalidInputReturnFalse()
         {
-            Board board = new Board();
-            Shape shape = new Shape(Shape.Type.FiveLiner, Shape.ShapeOrientation.E);
+            Board board = new Board(8);
+            Shape shape = new Shape(Shape.Type.FourLiner, Shape.ShapeOrientation.N);
 
             Assert.IsFalse(board.TryPlace(shape, null));
             Assert.IsFalse(board.TryPlace(shape, ""));
@@ -32,9 +32,9 @@ namespace UnitTestProject1
         [TestMethod]
         public void SingleWClearedStats()
         {
-            Board board = new Board();
-            board.TryPlace(new Shape(Shape.Type.FourLiner, Shape.ShapeOrientation.W), "a1");
-            board.TryPlace(new Shape(Shape.Type.FourLiner, Shape.ShapeOrientation.W), "e1");
+            Board board = new Board(8);
+            board.TryPlace(new Shape(Shape.Type.FourLiner, Shape.ShapeOrientation.N), "a1");
+            board.TryPlace(new Shape(Shape.Type.FourLiner, Shape.ShapeOrientation.N), "a5");
             var lines = board.Stats.Lines;
             Assert.AreEqual(1, lines[0]);
         }
@@ -42,7 +42,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void SingleNClearedStats()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             board.TryPlace(new Shape(Shape.Type.FourLiner, Shape.ShapeOrientation.N), "c1");
             board.TryPlace(new Shape(Shape.Type.FourLiner, Shape.ShapeOrientation.N), "c5");
             var lines = string.Join("", (from x in board.Stats.Lines select x.ToString()).ToArray());
@@ -52,9 +52,10 @@ namespace UnitTestProject1
         [TestMethod]
         public void DoubleLinesClearedStats()
         {
-            Board board = new Board();
-            board.TryPlace(new Shape(Shape.Type.LargeSquare, Shape.ShapeOrientation.N), "a1");
-            board.TryPlace(new Shape(Shape.Type.LargeSquare, Shape.ShapeOrientation.N), "d1");
+            Board board = new Board(8);
+            board.TryPlace(new Shape(Shape.Type.SmallSquare, Shape.ShapeOrientation.N), "a1");
+            board.TryPlace(new Shape(Shape.Type.SmallSquare, Shape.ShapeOrientation.N), "c1");
+            board.TryPlace(new Shape(Shape.Type.SmallSquare, Shape.ShapeOrientation.N), "e1");
             board.TryPlace(new Shape(Shape.Type.SmallSquare, Shape.ShapeOrientation.N), "g1");
             var lines = string. Join("", (from x in board.Stats.Lines select x.ToString()).ToArray());
             Assert.AreEqual("01000000", lines);

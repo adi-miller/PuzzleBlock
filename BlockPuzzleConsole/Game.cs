@@ -11,7 +11,8 @@ namespace PuzzleBlock
             var seed = 502;
             var start = DateTime.Now;
 
-            var game = new Game(new FullEvalPlayer());
+            //var game = new Game(new FullEvalPlayer());
+            var game = new Game(new ManualPlayer());
 
             game.rnd = new Random(seed);
             game.Play();
@@ -27,7 +28,7 @@ namespace PuzzleBlock
         }
 
         private Random rnd;
-        private Board board = new Board();
+        private Board board = new Board(5);
         private IPlayer player;
         private IGameDrawer renderer = new ConsoleGameDrawer();
         private IDictionary<int, Shape> shapes = new Dictionary<int, Shape>();

@@ -11,7 +11,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void NoFragsTest()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             Assert.IsTrue(Math.Abs(1F - Fragmentation.GetFragmentationScore(board.Cells)) < 0.0001);
             Assert.AreEqual(0, Fragmentation.SurroundedSignals(board.Cells));
@@ -20,7 +20,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void SomeFragsTest()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             board.Cells[0][0] = true;
 
             Assert.IsTrue(Math.Abs(0.966666639F - Fragmentation.GetFragmentationScore(board.Cells)) < 0.0001);
@@ -30,7 +30,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void SurroundFragsTest()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             board.Cells[1][0] = true;
             board.Cells[0][1] = true;
 
@@ -50,7 +50,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void MaxFragTest()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             for (int x = 0; x < 8; x = x + 2)
                 for (int y = 0; y < 8; y++)
                     board.Cells[x + (y % 2)][y] = true;

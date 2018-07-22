@@ -11,7 +11,7 @@ namespace Tests
         [TestMethod]
         public void EmptyMatrix()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             Assert.AreEqual(64, MaxArea.MaximalRectangle(board.Cells));
         }
@@ -19,7 +19,7 @@ namespace Tests
         [TestMethod]
         public void SingleCornerCell()
         {
-            Board board = new Board();
+            Board board = new Board(8);
 
             board.Cells[0][0] = true;
             Assert.AreEqual(56, MaxArea.MaximalRectangle(board.Cells));
@@ -41,7 +41,7 @@ namespace Tests
         [TestMethod]
         public void TwoDiagonalCornerCells()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             board.Cells[0][0] = true;
             board.Cells[7][7] = true;
 
@@ -51,7 +51,7 @@ namespace Tests
         [TestMethod]
         public void AllCornerCells()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             board.Cells[0][0] = true;
             board.Cells[0][7] = true;
             board.Cells[7][0] = true;
@@ -63,7 +63,7 @@ namespace Tests
         [TestMethod]
         public void AllCells()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
                     board.Cells[i][j] = true;
@@ -74,7 +74,7 @@ namespace Tests
         [TestMethod]
         public void HalfOfAllCells()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 8; j++)
                     board.Cells[i][j] = true;
@@ -85,7 +85,7 @@ namespace Tests
         [TestMethod]
         public void HalfAndMoreOfAllCells()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
                     board.Cells[i][j] = true;
@@ -96,7 +96,7 @@ namespace Tests
         [TestMethod]
         public void QuarterOfAllCells()
         {
-            Board board = new Board();
+            Board board = new Board(8);
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
                     board.Cells[i][j] = true;

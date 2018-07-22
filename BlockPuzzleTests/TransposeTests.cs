@@ -13,7 +13,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void RandomTransposeTest()
         {
-            var board = new Board();
+            var board = new Board(8);
             var rnd = new Random();
 
             for (int x = 0; x < 7; x++)
@@ -37,7 +37,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TransposeTest()
         {
-            var board = new Board();
+            var board = new Board(8);
 
             board.Cells[0][7] = true;
 

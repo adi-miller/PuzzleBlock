@@ -6,8 +6,10 @@ namespace PuzzleBlock
     {
         public bool[,] Bits;
 
-        public enum Type { Singler, SmallL, LargeL, ThreeLiner, FourLiner, FiveLiner, LongTail, SmallSquare, LargeSquare }
-        public enum ShapeOrientation { N, W, S, E }
+        //public enum Type { Singler, SmallL, LargeL, ThreeLiner, FourLiner, FiveLiner, LongTail, SmallSquare, LargeSquare }
+        public enum Type { Singler, FourLiner, SmallSquare }
+        //public enum ShapeOrientation { N, W, S, E }
+        public enum ShapeOrientation { N }
 
         private Type ShapeType { get; }
         private ShapeOrientation Orientation { get; }
@@ -39,7 +41,7 @@ namespace PuzzleBlock
         {
             switch (ShapeType)
             {
-                case Shape.Type.FiveLiner:
+/*                case Shape.Type.FiveLiner:
                     if (Orientation == Shape.ShapeOrientation.W || Orientation == Shape.ShapeOrientation.E)
                     {
                         // Console.WriteLine("XXXXX");
@@ -53,13 +55,13 @@ namespace PuzzleBlock
                         for (int i = 0; i < 5; i++)
                             Bits[i, 0] = true;
                     }
-                    break;
+                    break;*/
                 case Shape.Type.Singler:
                     // Console.WriteLine("X");
                     Bits = new bool[1, 1];
                     Bits[0, 0] = true;
                     break;
-                case Shape.Type.SmallL:
+/*                case Shape.Type.SmallL:
                     Bits = new bool[2, 2];
                     switch (Orientation)
                     {
@@ -88,8 +90,8 @@ namespace PuzzleBlock
                             Bits[1, 0] = true; Bits[1, 1] = true;
                             break;
                     }
-                    break;
-                case Shape.Type.LargeL:
+                    break;*/
+/*                case Shape.Type.LargeL:
                     Bits = new bool[3, 3];
                     switch (Orientation)
                     {
@@ -126,8 +128,8 @@ namespace PuzzleBlock
                             Bits[2, 0] = true; Bits[2, 1] = true; Bits[2, 2] = true;
                             break;
                     }
-                    break;
-                case Shape.Type.ThreeLiner:
+                    break;*/
+/*                case Shape.Type.ThreeLiner:
                     if (Orientation == Shape.ShapeOrientation.W || Orientation == Shape.ShapeOrientation.E)
                     {
                         // Console.WriteLine("XXX");
@@ -141,23 +143,23 @@ namespace PuzzleBlock
                         for (int i = 0; i < 3; i++)
                             Bits[i, 0] = true;
                     }
-                    break;
+                    break;*/
                 case Shape.Type.FourLiner:
-                    if (Orientation == Shape.ShapeOrientation.W || Orientation == Shape.ShapeOrientation.E)
+/*                    if (Orientation == Shape.ShapeOrientation.W || Orientation == Shape.ShapeOrientation.E)
                     {
                         // Console.WriteLine("XXXX");
                         Bits = new bool[1, 4];
                         for (int i = 0; i < 4; i++)
                             Bits[0, i] = true;
                     }
-                    else
+                    else*/
                     {
                         Bits = new bool[4, 1];
                         for (int i = 0; i < 4; i++)
                             Bits[i, 0] = true;
                     }
                     break;
-                case Shape.Type.LongTail:
+/*                case Shape.Type.LongTail:
                     switch (Orientation)
                     {
                         case Shape.ShapeOrientation.N:
@@ -193,7 +195,7 @@ namespace PuzzleBlock
                             Bits[2, 0] = true; Bits[2, 1] = true;
                             break;
                     }
-                    break;
+                    break;*/
                 case Shape.Type.SmallSquare:
                     // Console.WriteLine("XX");
                     // Console.WriteLine("XX");
@@ -201,7 +203,7 @@ namespace PuzzleBlock
                     Bits[0, 0] = true; Bits[0, 1] = true;
                     Bits[1, 0] = true; Bits[1, 1] = true;
                     break;
-                case Shape.Type.LargeSquare:
+/*                case Shape.Type.LargeSquare:
                     // Console.WriteLine("XXX");
                     // Console.WriteLine("XXX");
                     // Console.WriteLine("XXX");
@@ -209,7 +211,7 @@ namespace PuzzleBlock
                     Bits[0, 0] = true; Bits[0, 1] = true; Bits[0, 2] = true;
                     Bits[1, 0] = true; Bits[1, 1] = true; Bits[1, 2] = true;
                     Bits[2, 0] = true; Bits[2, 1] = true; Bits[2, 2] = true;
-                    break;
+                    break;*/
             }
         }
     }
