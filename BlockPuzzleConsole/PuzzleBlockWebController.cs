@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Web.Http;
+﻿using System.Web.Http;
 using PuzzleBlock.Players;
 
 namespace PuzzleBlock
@@ -10,11 +9,7 @@ namespace PuzzleBlock
         {
             var player = (WebControllerPlayer)Game.TheGame.Player;
             player.Enqueue(shapeId, placement);
-            while (!player.Waiting)
-            {
-                Thread.Yield();
-                Thread.Sleep(500);
-            }
+            player.WaitForMoveCompletion();
             return Game.TheGame.GameState();
         }
     }

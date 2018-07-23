@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Owin.Hosting;
 using PuzzleBlock.Players;
 using PuzzleBlock.Utils;
 
@@ -11,20 +10,23 @@ namespace PuzzleBlock
         public static Game TheGame;
         static void Main()
         {
-            string baseAddress = "http://localhost:9000/";
-            using (WebApp.Start<Startup>( baseAddress))
+            while (true)
             {
-                var seed = 502;
+                var seed = DateTime.Now.Millisecond;
                 var start = DateTime.Now;
 
-                //TheGame = new Game(new FullEvalPlayer());
-                TheGame = new Game(new WebControllerPlayer()) {rnd = new Random(seed)};
+                TheGame =
+                    //new Game(new FullEvalPlayer())
+                    new Game(new ManualPlayer())
+                    //new Game(new WebControllerPlayer())
+                    {
+                        rnd = new Random(seed)
+                    };
 
                 TheGame.Play();
 
                 Console.WriteLine("Game seed: " + seed);
                 Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
-                Console.ReadLine();
             }
         }
 
@@ -40,44 +42,28 @@ namespace PuzzleBlock
         private IPlayer player;
         private IGameDrawer renderer = new ConsoleGameDrawer();
         private IDictionary<int, Shape> shapes = new Dictionary<int, Shape>();
-        private Object thisLock = new Object();
 
         void Play()
         {
-            renderer.DrawBoard(board);
-
-            if (shapes.Count == 0)
-                CreateShapes();
-
-            DrawShapes();
-
+            CreateShapes();
             while (!board.GameOver(shapes))
             {
-                lock (thisLock)
+                renderer.DrawBoard(board);
+                DrawShapes();
+
+                player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
+
+                if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
+                    shapes.Remove(shapeId);
+                else
+                    renderer.ErrorMessage("<Error>");
+
+                if (shapes.Count == 0)
                 {
-                    while (!board.GameOver(shapes))
-                    {
+                    CreateShapes();
+                }
 
-                        player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
-
-                        if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
-                        {
-                            shapes.Remove(shapeId);
-                            break;
-                        }
-                        else
-                        {
-                            renderer.ErrorMessage("<Error>");
-                        }
-                    }
-
-                    renderer.DrawBoard(board);
-
-                    if (shapes.Count == 0)
-                        CreateShapes();
-
-                    DrawShapes();
-                } 
+                player.OnMoveComplete();
             }
 
             renderer.ErrorMessage("*** Game Over ***");
@@ -88,16 +74,12 @@ namespace PuzzleBlock
         {
             // Create info per shape
             List<WebShape> webShapes = new List<WebShape>();
-
-            lock (thisLock)
+            foreach (var s in shapes)
             {
-                foreach (var s in shapes)
-                {
-                    int index = s.Key;
-                    Shape shape = s.Value;
-                    WebShape webShape = new WebShape(index, shape.ShapeType.ToString(), shape.Orientation.ToString(), GetPossiblePlacements(shape));
-                    webShapes.Add(webShape);
-                }
+                int index = s.Key;
+                Shape shape = s.Value;
+                WebShape webShape = new WebShape(index, shape.ShapeType.ToString(), shape.Orientation.ToString(), GetPossiblePlacements(shape));
+                webShapes.Add(webShape);
             }
 
             // Create the response

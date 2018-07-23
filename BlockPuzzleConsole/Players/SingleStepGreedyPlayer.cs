@@ -41,6 +41,10 @@ namespace PuzzleBlock.Players
                     }
             }
         }
+
+        public void OnMoveComplete()
+        {
+        }
     }
 
     class CellsSingleStepGreedyPlayer : SingleStepGreedyPlayer

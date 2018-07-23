@@ -47,6 +47,10 @@ namespace PuzzleBlock.Players
             placement = final.Placement;
             shapeId = final.ShapeId;
         }
+
+        public void OnMoveComplete()
+        {
+        }
     }
 
     class Candidate

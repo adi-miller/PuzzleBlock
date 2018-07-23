@@ -53,6 +53,10 @@ namespace PuzzleBlock.Players
             CalcMoves.RemoveAt(0);
         }
 
+        public void OnMoveComplete()
+        {
+        }
+
         private void InnerMakeAMove(Board board, IDictionary<int, Shape> shapes,
             IList<GamePath> gamePaths, GamePath startGamePath, IGameDrawer renderer)
         {
