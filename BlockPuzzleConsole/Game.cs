@@ -16,7 +16,8 @@ namespace PuzzleBlock
 
                 TheGame =
                     //new Game(new FullEvalPlayer())
-                    new Game(new WebControllerPlayer())
+                    new Game(new ManualPlayer())
+                    //new Game(new WebControllerPlayer())
                     {
                         rnd = new Random(seed)
                     };
@@ -43,28 +44,25 @@ namespace PuzzleBlock
 
         void Play()
         {
+            CreateShapes();
             while (!board.GameOver(shapes))
             {
                 renderer.DrawBoard(board);
-
-                if (shapes.Count == 0)
-                    CreateShapes();
-
                 DrawShapes();
 
-                while (!board.GameOver(shapes))
-                {
-                    player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
+                player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
 
-                    if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
-                    {
-                        shapes.Remove(shapeId);
-                        break;
-                    }
-
+                if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
+                    shapes.Remove(shapeId);
+                else
                     renderer.ErrorMessage("<Error>");
-                    player.OnMoveComplete();
+
+                if (shapes.Count == 0)
+                {
+                    CreateShapes();
                 }
+
+                player.OnMoveComplete();
             }
 
             renderer.DrawBoard(board);
