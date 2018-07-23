@@ -103,6 +103,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes.cs" />
     <Compile Include="Players\SingleStepGreedyPlayer.cs" />
+    <Compile Include="Utils\WebResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

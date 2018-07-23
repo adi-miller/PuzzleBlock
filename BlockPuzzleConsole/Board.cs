@@ -65,7 +65,7 @@ namespace PuzzleBlock
             // TODO: Copy Stats
         }
 
-        private bool CanFit(Shape shape, int num, int letter)
+        public bool CanFit(Shape shape, int num, int letter)
         {
             // Check if not occupied already and if not out of bound
             if (((shape.Bits.GetUpperBound(0) + num) >= BoardSize) || (((shape.Bits.GetUpperBound(1) + letter) >= BoardSize)))

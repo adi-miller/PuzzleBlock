@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PuzzleBlock.Players;
+using PuzzleBlock.Utils;
 
 namespace PuzzleBlock
 {
@@ -66,14 +67,47 @@ namespace PuzzleBlock
             }
 
             renderer.DrawBoard(board);
-            DrawShapes();
+-           DrawShapes();
             renderer.ErrorMessage("*** Game Over ***");
             renderer.DrawStats(board);
         }
 
         public string GameState()
         {
-            return "jsonGameState";
+            // Create info per shape
+            List<WebShape> webShapes = new List<WebShape>();
+            foreach (var s in shapes)
+            {
+                int index = s.Key;
+                Shape shape = s.Value;
+                WebShape webShape = new WebShape(index, shape.ShapeType.ToString(), shape.Orientation.ToString(), GetPossiblePlacements(shape));
+                webShapes.Add(webShape);
+            }
+
+            // Create the response
+            WebResponse webResponse = new WebResponse(board.GameOver(shapes), board.Score, board.Cells, webShapes);
+
+            return webResponse.ToJsonString();
+        }
+
+        private List<string> GetPossiblePlacements(Shape shape)
+        {
+            List<string> placments = new List<string>();
+
+            // for each place on board if can fit shape add the place to possible placements
+            for (int x = 0; x < (board.BoardSize); x++)
+                for (int y = 0; y < (board.BoardSize); y++)
+                {
+                    if (board.CanFit(shape, y, x))
+                        placments.Add(GetPlacement(y,x));
+                }
+
+            return placments;
+        }
+
+        private string GetPlacement(int y, int x)
+        {
+            return string.Format($"{(char)('A' + x)}{y+1}");
         }
 
         private void CreateShapes()

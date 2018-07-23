@@ -11,8 +11,8 @@ namespace PuzzleBlock
         //public enum ShapeOrientation { N, W, S, E }
         public enum ShapeOrientation { N }
 
-        private Type ShapeType { get; }
-        private ShapeOrientation Orientation { get; }
+        public Type ShapeType { get; }
+        public ShapeOrientation Orientation { get; }
 
         public ConsoleColor Color { get; }
 
