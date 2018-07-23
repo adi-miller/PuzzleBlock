@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Owin.Hosting;
 using PuzzleBlock.Players;
+using PuzzleBlock.Utils;
 
 namespace PuzzleBlock
 {
@@ -39,41 +40,90 @@ namespace PuzzleBlock
         private IPlayer player;
         private IGameDrawer renderer = new ConsoleGameDrawer();
         private IDictionary<int, Shape> shapes = new Dictionary<int, Shape>();
+        private Object thisLock = new Object();
 
         void Play()
         {
+            renderer.DrawBoard(board);
+
+            if (shapes.Count == 0)
+                CreateShapes();
+
+            DrawShapes();
+
             while (!board.GameOver(shapes))
             {
-                renderer.DrawBoard(board);
-
-                if (shapes.Count == 0)
-                    CreateShapes();
-
-                DrawShapes();
-
-                while (!board.GameOver(shapes))
+                lock (thisLock)
                 {
-                    player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
-
-                    if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
+                    while (!board.GameOver(shapes))
                     {
-                        shapes.Remove(shapeId);
-                        break;
+
+                        player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
+
+                        if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
+                        {
+                            shapes.Remove(shapeId);
+                            break;
+                        }
+                        else
+                        {
+                            renderer.ErrorMessage("<Error>");
+                        }
                     }
 
-                    renderer.ErrorMessage("<Error>");
-                }
+                    renderer.DrawBoard(board);
+
+                    if (shapes.Count == 0)
+                        CreateShapes();
+
+                    DrawShapes();
+                } 
             }
 
-            renderer.DrawBoard(board);
-            DrawShapes();
             renderer.ErrorMessage("*** Game Over ***");
             renderer.DrawStats(board);
         }
 
         public string GameState()
         {
-            return "jsonGameState";
+            // Create info per shape
+            List<WebShape> webShapes = new List<WebShape>();
+
+            lock (thisLock)
+            {
+                foreach (var s in shapes)
+                {
+                    int index = s.Key;
+                    Shape shape = s.Value;
+                    WebShape webShape = new WebShape(index, shape.ShapeType.ToString(), shape.Orientation.ToString(), GetPossiblePlacements(shape));
+                    webShapes.Add(webShape);
+                }
+            }
+
+            // Create the response
+            WebResponse webResponse = new WebResponse(board.GameOver(shapes), board.Score, board.Cells, webShapes);
+
+            return webResponse.ToJsonString();
+        }
+
+        private List<string> GetPossiblePlacements(Shape shape)
+        {
+            List<string> placments = new List<string>();
+
+            // for each place on board if can fit shape add the place to possible placements
+            for (int x = 0; x < (board.BoardSize); x++)
+                for (int y = 0; y < (board.BoardSize); y++)
+                {
+                    if (board.CanFit(shape, y, x))
+                        placments.Add(GetPlacement(y,x));
+                }
+
+            return placments;
+        }
+
+        private string GetPlacement(int y, int x)
+        {
+            return string.Format($"{(char)('A' + x)}{y+1}");
         }
 
         private void CreateShapes()
