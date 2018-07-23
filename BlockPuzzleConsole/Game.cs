@@ -66,6 +66,8 @@ namespace PuzzleBlock
                 player.OnMoveComplete();
             }
 
+            renderer.DrawBoard(board);
+-           DrawShapes();
             renderer.ErrorMessage("*** Game Over ***");
             renderer.DrawStats(board);
         }
