@@ -1,31 +1,45 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
+using Microsoft.Owin.Hosting;
 
 namespace PuzzleBlock.Players
 {
     public class WebControllerPlayer : IPlayer
     {
-        private IList<Tuple<int, string>> queue = new List<Tuple<int, string>>();
-        public bool Waiting = false;
+        private static IDisposable server;
+        private BlockingCollection<Tuple<int, string>> inputQueue = new BlockingCollection<Tuple<int, string>>();
+        private BlockingCollection<object> outputQueue = new BlockingCollection<object>();
+
+        public WebControllerPlayer()
+        {
+            if (server == null)
+            {
+                string baseAddress = "http://localhost:9000/";
+                server = WebApp.Start<Startup>(baseAddress);
+            }
+        }
+
         public void MakeAMove(out int shapeId, out string placement, Board board, IDictionary<int, Shape> shapes, IGameDrawer renderer)
         {
-            while (queue.Count == 0)
-            {
-                Waiting = true;
-                Thread.Yield();
-            }
-
-            Waiting = false;
-            var tuple = queue[0];
+            var tuple = inputQueue.Take();
             shapeId = tuple.Item1;
             placement = tuple.Item2;
-            queue.RemoveAt(0);
+        }
+
+        public void OnMoveComplete()
+        {
+            outputQueue.Add(new object());
         }
 
         public void Enqueue(int shapeId, string placement)
         {
-            queue.Add(new Tuple<int, string>(shapeId, placement));
+            inputQueue.Add(new Tuple<int, string>(shapeId, placement));
+        }
+
+        public void WaitForMoveCompletion()
+        {
+            outputQueue.Take();
         }
     }
 }

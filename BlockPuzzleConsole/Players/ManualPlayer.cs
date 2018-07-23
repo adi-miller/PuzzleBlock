@@ -9,5 +9,9 @@ namespace PuzzleBlock.Players
             shapeId = renderer.ChooseShape();
             placement = renderer.ChoosePlacement();
         }
+
+        public void OnMoveComplete()
+        {
+        }
     }
 }

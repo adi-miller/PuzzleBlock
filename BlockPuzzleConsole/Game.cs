@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Owin.Hosting;
 using PuzzleBlock.Players;
 
 namespace PuzzleBlock
@@ -10,20 +9,22 @@ namespace PuzzleBlock
         public static Game TheGame;
         static void Main()
         {
-            string baseAddress = "http://localhost:9000/";
-            using (WebApp.Start<Startup>( baseAddress))
+            while (true)
             {
-                var seed = 502;
+                var seed = DateTime.Now.Millisecond;
                 var start = DateTime.Now;
 
-                //TheGame = new Game(new FullEvalPlayer());
-                TheGame = new Game(new WebControllerPlayer()) {rnd = new Random(seed)};
+                TheGame =
+                    //new Game(new FullEvalPlayer())
+                    new Game(new WebControllerPlayer())
+                    {
+                        rnd = new Random(seed)
+                    };
 
                 TheGame.Play();
 
                 Console.WriteLine("Game seed: " + seed);
                 Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
-                Console.ReadLine();
             }
         }
 
@@ -62,6 +63,7 @@ namespace PuzzleBlock
                     }
 
                     renderer.ErrorMessage("<Error>");
+                    player.OnMoveComplete();
                 }
             }
 
