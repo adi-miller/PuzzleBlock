@@ -1,0 +1,6 @@
+namespace PuzzleBlockWeb.Areas.HelpPage.ModelDescriptions
+{
+    public class DictionaryModelDescription : KeyValuePairModelDescription
+    {
+    }
+}

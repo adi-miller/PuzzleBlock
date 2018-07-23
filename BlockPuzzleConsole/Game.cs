@@ -1,31 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Owin.Hosting;
 using PuzzleBlock.Players;
 
 namespace PuzzleBlock
 {
-    class Game
+    public class Game
     {
+        public static Game TheGame;
         static void Main()
         {
-            var seed = 502;
-            var start = DateTime.Now;
+            string baseAddress = "http://localhost:9000/";
+            using (WebApp.Start<Startup>( baseAddress))
+            {
+                var seed = 502;
+                var start = DateTime.Now;
 
-            //var game = new Game(new FullEvalPlayer());
-            var game = new Game(new ManualPlayer());
+                //TheGame = new Game(new FullEvalPlayer());
+                TheGame = new Game(new WebControllerPlayer()) {rnd = new Random(seed)};
 
-            game.rnd = new Random(seed);
-            game.Play();
+                TheGame.Play();
 
-            Console.WriteLine("Game seed: " + seed);
-            Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
-            Console.ReadLine();
+                Console.WriteLine("Game seed: " + seed);
+                Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
+                Console.ReadLine();
+            }
         }
 
-        public Game(IPlayer player)
+        Game(IPlayer player)
         {
             this.player = player;
         }
+
+        public IPlayer Player => this.player;
 
         private Random rnd;
         private Board board = new Board(5);
@@ -62,6 +69,11 @@ namespace PuzzleBlock
             DrawShapes();
             renderer.ErrorMessage("*** Game Over ***");
             renderer.DrawStats(board);
+        }
+
+        public string GameState()
+        {
+            return "jsonGameState";
         }
 
         private void CreateShapes()

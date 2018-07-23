@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PuzzleBlock
 {
-    interface IGameDrawer
+    public interface IGameDrawer
     {
         string ChoosePlacement();
         int ChooseShape();
