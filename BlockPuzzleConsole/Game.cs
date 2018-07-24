@@ -48,22 +48,30 @@ namespace PuzzleBlock
             CreateShapes();
             while (!board.GameOver(shapes))
             {
-                renderer.DrawBoard(board);
-                DrawShapes();
-
-                player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
-
-                if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
-                    shapes.Remove(shapeId);
-                else
-                    renderer.ErrorMessage("<Error>");
-
-                if (shapes.Count == 0)
+                try
                 {
-                    CreateShapes();
-                }
+                    renderer.DrawBoard(board);
+                    DrawShapes();
 
-                player.OnMoveComplete();
+                    player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
+
+                    if (shapeId == -1)
+                        break;
+
+                    if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
+                        shapes.Remove(shapeId);
+                    else
+                        renderer.ErrorMessage("<Error>");
+
+                    if (shapes.Count == 0)
+                    {
+                        CreateShapes();
+                    }
+                }
+                finally
+                {
+                    player.OnMoveComplete();
+                }
             }
 
             renderer.DrawBoard(board);
@@ -107,7 +115,7 @@ namespace PuzzleBlock
 
         private string GetPlacement(int y, int x)
         {
-            return string.Format($"{(char)('A' + x)}{y+1}");
+            return string.Format($"{(char)('a' + x)}{y+1}");
         }
 
         private void CreateShapes()
