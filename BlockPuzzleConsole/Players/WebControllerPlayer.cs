@@ -11,11 +11,11 @@ namespace PuzzleBlock.Players
         private BlockingCollection<Tuple<int, string>> inputQueue = new BlockingCollection<Tuple<int, string>>();
         private BlockingCollection<object> outputQueue = new BlockingCollection<object>();
 
-        public WebControllerPlayer()
+        public WebControllerPlayer(string port)
         {
             if (server == null)
             {
-                string baseAddress = "http://localhost:9000/";
+                string baseAddress = $"http://localhost:{port}/";
                 server = WebApp.Start<Startup>(baseAddress);
             }
         }

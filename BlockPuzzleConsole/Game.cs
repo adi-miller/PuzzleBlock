@@ -8,7 +8,7 @@ namespace PuzzleBlock
     public class Game
     {
         public static Game TheGame;
-        static void Main()
+        static void Main(string[] args)
         {
             while (true)
             {
@@ -17,8 +17,8 @@ namespace PuzzleBlock
 
                 TheGame =
                     //new Game(new FullEvalPlayer())
-                    new Game(new ManualPlayer())
-                    //new Game(new WebControllerPlayer())
+                    //new Game(new ManualPlayer())
+                    new Game(new WebControllerPlayer(args.Length == 1 ? args[0] : "9000"))
                     {
                         rnd = new Random(seed)
                     };
