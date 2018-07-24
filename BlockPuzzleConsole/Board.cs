@@ -9,7 +9,7 @@ namespace PuzzleBlock
         private int cellCountSum;
 
         public int Placements { get { return placements; } }
-        public int AvgCellCount { get { return cellCountSum / placements; } }
+        public int AvgCellCount { get { return placements == 0 ? placements : cellCountSum / placements; } }
         public int[] Lines { get; set; }
 
         public void AddCellCount(int cellCount)
