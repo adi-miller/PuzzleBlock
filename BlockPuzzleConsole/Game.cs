@@ -11,23 +11,31 @@ namespace PuzzleBlock
         static void Main(string[] args)
         {
             WebControllerPlayer webControllerPlayer = new WebControllerPlayer(args.Length == 1 ? args[0] : "9000");
+
+            int numOfGames = 0;
+            int topScore = 0;
+            Console.Clear();
             while (true)
             {
                 var seed = DateTime.Now.Millisecond;
                 var start = DateTime.Now;
+                numOfGames++;
 
                 TheGame =
-                    //new Game(new FullEvalPlayer())
+                    new Game(new FullEvalPlayer())
                     //new Game(new ManualPlayer())
-                    new Game(webControllerPlayer)
+                    //new Game(webControllerPlayer)
                     {
                         rnd = new Random(seed)
                     };
 
                 TheGame.Play();
 
-                Console.WriteLine("Game seed: " + seed);
-                Console.WriteLine(@"Duration: {0:mm\:ss\.ff}", (DateTime.Now - start));
+                //Console.WriteLine("Game seed: " + seed);
+                if (topScore < TheGame.board.Score)
+                    topScore = TheGame.board.Score;
+
+                Console.WriteLine(@"Game #{2}. Top Score: {1}. Duration: {0:mm\:ss\.ff}. ", (DateTime.Now - start), topScore, numOfGames);
             }
         }
 
@@ -47,11 +55,13 @@ namespace PuzzleBlock
         void Play()
         {
             CreateShapes();
+            var firstDraw = true;
             while (!board.GameOver(shapes))
             {
                 try
                 {
-                    renderer.DrawBoard(board);
+                    renderer.DrawBoard(board, firstDraw);
+                    firstDraw = false;
                     DrawShapes();
 
                     player.MakeAMove(out var shapeId, out var placement, board, shapes, renderer);
@@ -61,8 +71,8 @@ namespace PuzzleBlock
 
                     if (shapes.ContainsKey(shapeId) && board.TryPlace(shapes[shapeId], placement))
                         shapes.Remove(shapeId);
-                    else
-                        renderer.ErrorMessage("<Error>");
+                    //else
+                        //renderer.ErrorMessage("<Error>");
 
                     if (shapes.Count == 0)
                     {
@@ -75,10 +85,10 @@ namespace PuzzleBlock
                 }
             }
 
-            renderer.DrawBoard(board);
-            DrawShapes();
-            renderer.ErrorMessage("*** Game Over ***");
+            renderer.DrawBoard(board, false);
+            //DrawShapes();
             renderer.DrawStats(board);
+            renderer.ErrorMessage("*** Game Over ***");
         }
 
         public string GameState()
@@ -144,6 +154,7 @@ namespace PuzzleBlock
 
         private void DrawShapes()
         {
+            renderer.ClearShapes();
             for (int i = 0; i < 3; i++)
             {
                 var shape = shapes.ContainsKey(i) ? shapes[i] : null;

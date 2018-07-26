@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Text;
 
 namespace PuzzleBlock
 {
@@ -8,13 +7,14 @@ namespace PuzzleBlock
     {
         string ChoosePlacement();
         int ChooseShape();
-        void DrawBoard(Board board);
+        void DrawBoard(Board board, bool firstDraw);
         void DrawShape(Shape shape, int ordinal, bool canFit);
         void ErrorMessage(string message);
         void DrawStats(Board board);
         void ShowMessage(string message);
         void ShowUpdateMessageStart(string s);
         void ShowUpdateMessage(string s);
+        void ClearShapes();
     }
 
     public class ConsoleGameDrawer : IGameDrawer
@@ -39,17 +39,28 @@ namespace PuzzleBlock
             }
             Console.WriteLine();
         }
-        public void DrawBoard(Board board)
+        public void DrawBoard(Board board, bool firstDraw)
         {
             this.board = board;
+            //firstDraw = false;
+            Console.SetCursorPosition(0, 0);
             Console.WriteLine("   --- Turn: {0,3} - Score: {1,4} ---", board.Stats.Placements, board.Score);
-            Console.WriteLine("");
-            drawBoarderLines("", "", "", true);
-            drawBoarderLines("┌───", "┬───", "┐");
+            if (firstDraw)
+            {
+                Console.WriteLine("");
+                drawBoarderLines("", "", "", true);
+                drawBoarderLines("┌───", "┬───", "┐");
+            }
+            else
+                Console.SetCursorPosition(0, 4);
+
             for (int x = 0; x <= (board.BoardSize-1); x++)
             {
-                if (x != 0)
+                if (firstDraw && x != 0)
                     drawBoarderLines("├───", "┼───", "┤");
+                else
+                    Console.SetCursorPosition(0, 4+(x*2));
+
                 Console.Write((x+1)+" │");
                 for (int y = 0; y <= (board.BoardSize - 1); y++)
                 {
@@ -69,21 +80,34 @@ namespace PuzzleBlock
                         Console.WriteLine("│ "+(x+1));
                 }
             }
-            drawBoarderLines("└───", "┴───", "┘");
-            drawBoarderLines("", "", "", true);
-            Console.WriteLine();
+            if (firstDraw)
+            {
+                drawBoarderLines("└───", "┴───", "┘");
+                drawBoarderLines("", "", "", true);
+                Console.WriteLine();
+            }
         }
 
+        private string lineFill(string str)
+        {
+            var screenWidth = Console.WindowWidth;
+            var sb = new StringBuilder(str);
+            for (int i = str.Length; i <= screenWidth; i++)
+                sb.Append(" ");
+
+            return sb.ToString();
+        }
         public void DrawShape(Shape shape, int ordinal, bool canFit)
         {
+            Console.SetCursorPosition(ordinal*40, 18);
             Console.WriteLine(" - Shape #{0} ({1})", ordinal+1, shape?.Name);
 
             if (shape == null)
                 return;
 
-
             for (int x = 0; x <= shape.Bits.GetUpperBound(0); x++)
             {
+                Console.SetCursorPosition(ordinal * 40, 19 + x);
                 for (int y = 0; y <= shape.Bits.GetUpperBound(1); y++)
                 {
                     var block = canFit ? "█" : "▒";
@@ -138,7 +162,8 @@ namespace PuzzleBlock
 
         public void DrawStats(Board board)
         {
-            Console.WriteLine("Stats:");
+            Console.SetCursorPosition(0, 24);
+            Console.WriteLine("Last Game Stats:");
             Console.WriteLine(" + Score: {0}", board.Score);
             Console.WriteLine(" + Placements: {0}", board.Stats.Placements);
             Console.WriteLine(" + CellCount Average: {0}", board.Stats.AvgCellCount);
@@ -169,6 +194,15 @@ namespace PuzzleBlock
                 Console.Write(s);
                 lastPrint = DateTime.Now;
             }
+        }
+
+        public void ClearShapes()
+        {
+            var blank = lineFill("");
+            Console.SetCursorPosition(0, 18);
+            for (int i = 0; i <= 4; i++)
+                Console.Write(blank);
+
         }
     }
 }
